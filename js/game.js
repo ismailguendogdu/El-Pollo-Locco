@@ -1,7 +1,9 @@
 let canvas;
-let character = new Image();
-
+let ctx;
+let world = new World();
 function init() {
     canvas = document.getElementById('canvas');
-    character.src = '../img/2_character_pepe/2_walk/W-21.png';
+    ctx = canvas.getContext('2d');
+
+    console.log('My Chatacter is', world.character);
 }
