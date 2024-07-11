@@ -1,14 +1,14 @@
 class MovableObject extends DrawableObject {
-   
-    
-    
     
     speed = 0.15;
     otherDirection = false;
     speedY = 0;
     acceleration = 2.5;
-    enery = 100;
+    energy = 100;
     lastHit = 0;
+    bottleBar = 0;
+    coinsBar = 0;
+
 
 
     applyGravity() {
@@ -35,10 +35,18 @@ class MovableObject extends DrawableObject {
         this.y < mo.y + mo.height; 
     }
 
+    collectBottle() {
+        this.bottleBar += 20;
+    }
+
+    collectCoins() {
+        this.coinsBar += 20;
+    }
+
     hit() {
-        this.enery -= 5;
-        if(this.enery < 0) {
-            this.enery = 0;
+        this.energy -= 5;
+        if(this.energy < 0) {
+            this.energy = 0;
         } else {
             this.lastHit = new Date().getTime();
         }
@@ -51,7 +59,7 @@ class MovableObject extends DrawableObject {
     }
 
     isDead() {
-        return this.enery == 0;
+        return this.energy == 0;
     }
 
     playAnimation(images) {

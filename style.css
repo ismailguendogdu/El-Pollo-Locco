@@ -1,9 +1,42 @@
+@font-face {
+    font-family: 'rioGrande';
+    src: url('fonts/rioGrande.ttf') format('truetype');
+}
+
 body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin: 0;
+    background-image: url('img/desert.png');
+    background-position: center;
+    font-family: 'rioGrande', Arial, Helvetica, sans-serif;
+}
+
+h1 {
+    font-size: 64px;
+    margin: 0;
 }
 
 canvas {
     background-color: black;
+    display: block;
+    border-radius: 10px;
+    /* border: 8px solid black; */
+}
+
+@media only screen and (max-width: 720px) {
+    canvas {
+        width: 100%;
+    }
+
+    h1 {
+        display: none;
+     }
+}
+
+@media only screen and (max-height: 480px) {
+    canvas {
+        height: 100vh;
+    }
 }
