@@ -1,14 +1,36 @@
 let canvas;
 let world;
 let keyboard = new Keyboard();
+let startButton;
+let ctx;
 
 function init() {
     canvas = document.getElementById('canvas');
-    world = new World(canvas, keyboard);
+    ctx = canvas.getContext('2d');
+    // world = new World(canvas, keyboard);
+    startButton = document.getElementById('startButton');
 
-    console.log('My Chatacter is', world.character);
+    drawStartScreen();
+
+    // startButton.style.display = 'block';
+    // startButton.addEventListener('click', startGame);
+
 }
 
+function drawStartScreen() {
+    const startImage = new Image();
+    startImage.src = 'img/9_intro_outro_screens/start/startscreen_2.png';
+    startImage.onload = () => {
+        ctx.drawImage(startImage, 0, 0, canvas.width, canvas.height);
+        startButton.style.display = 'block'; 
+    };
+}
+
+function startGame() {
+    startButton.style.display = 'none';
+
+    world = new World(canvas, keyboard);
+}
 
 window.addEventListener('keydown', (e) => {
     if(e.keyCode == 39) {

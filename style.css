@@ -25,6 +25,17 @@ canvas {
     /* border: 8px solid black; */
 }
 
+#startButton {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    cursor: pointer;
+    opacity: 0.4;
+    width: 200px;
+}
+
 @media only screen and (max-width: 720px) {
     canvas {
         width: 100%;
@@ -38,5 +49,6 @@ canvas {
 @media only screen and (max-height: 480px) {
     canvas {
         height: 100vh;
+        border-radius: 0;
     }
 }
