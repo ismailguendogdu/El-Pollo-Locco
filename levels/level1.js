@@ -3,6 +3,10 @@ const level1 = new Level(
         new Chicken(),
         new Chicken(),
         new Chicken(),
+        new Chicken(),
+        new Chicken(),
+        new Chicken(),
+        new Chicken(),
         new Endboss(),
     ],
 
@@ -42,6 +46,12 @@ const level1 = new Level(
         new SalsaBottles('img/6_salsa_bottle/2_salsa_bottle_on_ground.png',100),
         new SalsaBottles('img/6_salsa_bottle/2_salsa_bottle_on_ground.png',700),
         new SalsaBottles('img/6_salsa_bottle/2_salsa_bottle_on_ground.png',800),
+        new SalsaBottles('img/6_salsa_bottle/2_salsa_bottle_on_ground.png',850),
+        new SalsaBottles('img/6_salsa_bottle/2_salsa_bottle_on_ground.png',880),
+        new SalsaBottles('img/6_salsa_bottle/2_salsa_bottle_on_ground.png',750),
+        new SalsaBottles('img/6_salsa_bottle/2_salsa_bottle_on_ground.png',780),
+        new SalsaBottles('img/6_salsa_bottle/2_salsa_bottle_on_ground.png',900),
+        new SalsaBottles('img/6_salsa_bottle/2_salsa_bottle_on_ground.png',950),
         new SalsaBottles('img/6_salsa_bottle/1_salsa_bottle_on_ground.png',880)
 
     ],

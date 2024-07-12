@@ -11,6 +11,7 @@ class World {
     throwableObjects = [];
     salsaBottles = [];
     coins = [];
+    collectBottles = 0;
 
  
 
@@ -35,28 +36,38 @@ class World {
             this.checkCollisionsBottles();
             this.checkCollisionsCoins();
             this.checkThrowObjects();
+            this.checkThrowBottleCollisions();
         }, 200);
     }
 
     checkThrowObjects() {
-        if(this.keyboard.D) {
-            let bottle = new ThrowableObject(this.character.x + 100, this.character.y + 100);
+        if (this.keyboard.D && this.collectBottles > 0) {
+            let bottleX = this.character.otherDirection ? this.character.x - 10 : this.character.x + 10;
+            let bottle = new ThrowableObject(bottleX, this.character.y, this.character.otherDirection);
             this.throwableObjects.push(bottle);
+            this.collectBottles--;
+            this.statusBarBottles.setPercentage(this.collectBottles);
         }
     }
 
     checkCollisions() {
-         this.level.enemies.forEach((enemy) => {
+         this.level.enemies.forEach((enemy, i) => {
             if (this.character.isColliding(enemy)) {
+                if(this.character.y + this.character.height - 20 < enemy.y) {
+                    this.level.enemies.splice(i, 1);
+                } else {
                 this.character.hit();
                 this.statusBar.setPercentage(this.character.energy);
             }
+        }
         });
     }
 
     checkCollisionsBottles() {
         this.level.salsaBottles.forEach((bottle, i) => {
             if (this.character.isColliding(bottle)) {
+                this.collectBottles++;
+                // this.statusBarBottles.setPercentage(this.collectBottles);
                 this.character.collectBottle();
                 this.statusBarBottles.setPercentage(this.character.bottleBar);
                 this.level.salsaBottles.splice(i, 1);
@@ -71,6 +82,17 @@ class World {
                 this.statusBarCoins.setPercentage(this.character.coinsBar);
                 this.level.coins.splice(i, 1);
             }
+        });
+    }
+
+    checkThrowBottleCollisions() {
+        this.throwableObjects.forEach((bottle,b) => {
+            this.level.enemies.forEach((enemy,e) => {
+                if(bottle.isColliding(enemy)) {
+                    this.level.enemies.splice(e, 1);
+                    this.throwableObjects.splice(b, 1);
+                }
+            });
         });
     }
 
