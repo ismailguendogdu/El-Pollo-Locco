@@ -9,8 +9,8 @@ class World {
     statusBarBottles = new StatusBarBottles();
     statusBarCoins = new StatusBarCoins();
     throwableObjects = [];
-    salsaBottles = [];
-    coins = [];
+    // salsaBottles = [];
+    // coins = [];
     collectBottles = 0;
 
  
@@ -37,7 +37,7 @@ class World {
             this.checkCollisionsCoins();
             this.checkThrowObjects();
             this.checkThrowBottleCollisions();
-        }, 200);
+        }, 100);
     }
 
     checkThrowObjects() {
@@ -51,15 +51,19 @@ class World {
     }
 
     checkCollisions() {
-         this.level.enemies.forEach((enemy, i) => {
-            if (this.character.isColliding(enemy)) {
-                if(this.character.y + this.character.height - 20 < enemy.y) {
-                    this.level.enemies.splice(i, 1);
+        this.level.enemies.forEach((enemy, i) => {
+            if (!enemy.isDeadChicken &&this.character.isColliding(enemy)) {
+                if (this.character.y + this.character.height - 50 < enemy.y 
+                    && this.character.speedY <= 0) {
+                    enemy.dieChicken();
+                    setTimeout(() => {
+                        this.level.enemies.splice(i, 1);
+                    }, 1000);
                 } else {
-                this.character.hit();
-                this.statusBar.setPercentage(this.character.energy);
+                    this.character.hit();
+                    this.statusBar.setPercentage(this.character.energy);
+                }   
             }
-        }
         });
     }
 
