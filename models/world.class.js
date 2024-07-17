@@ -13,6 +13,7 @@ class World {
     // salsaBottles = [];
     // coins = [];
     collectBottles = 0;
+    gameEnded = false;
     
 
  
@@ -71,14 +72,16 @@ class World {
         
     checkCollisionsEndboss(bottle, boss) {
         if (bottle.isColliding(boss)) {
+            boss.isHurt();
             boss.hit();
-            boss.energyEndboss -= 20;
+            boss.energyEndboss -=20;
             this.statusBarEndboss.setPercentage(boss.energyEndboss);
-    
+            // console.log('endboss hat noch', boss.energyEndboss);
             if (boss.energyEndboss > 0) {
                 boss.isHurt();
-            } else {
+            } if (boss.energyEndboss <= 0) {
                 boss.dieEndboss();
+                this.endGame();
             }
         }
     }
@@ -102,7 +105,7 @@ class World {
     checkCollisionsBottles() {
         this.level.salsaBottles.forEach((bottle, i) => {
             if (this.character.isColliding(bottle)) {
-                this.collectBottles++;
+                this.collectBottles ++;
                 // this.statusBarBottles.setPercentage(this.collectBottles);
                 this.character.collectBottle();
                 this.statusBarBottles.setPercentage(this.character.bottleBar);
@@ -121,7 +124,10 @@ class World {
         });
     }
 
- 
+    endGame() {
+        this.gameEnded = true; 
+        document.getElementById('endScreen').style.display = 'block'; 
+    }
     
 
     // Draw() wird immer wieder aufgerufen

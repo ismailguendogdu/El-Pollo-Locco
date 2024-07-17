@@ -3,19 +3,22 @@ let world;
 let keyboard = new Keyboard();
 let startButton;
 let ctx;
+let playAgainButton;
+let endScreen;
 
 function init() {
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');
-    // world = new World(canvas, keyboard);
     startButton = document.getElementById('startButton');
+    playAgainButton = document.getElementById('playAgainButton');
+    endScreen = document.getElementById('endScreen');
 
     drawStartScreen();
 
-    // startButton.style.display = 'block';
-    // startButton.addEventListener('click', startGame);
+    startButton.style.display = 'block';
+    startButton.addEventListener('click', startGame);
+    playAgainButton.addEventListener('click', playAgain);
     fullScreenButton();
-
 }
 
 function drawStartScreen() {
@@ -27,15 +30,29 @@ function drawStartScreen() {
     };
 }
 
-function startGame() {
-    startButton.style.display = 'none';
+function drawEndScreen() {
+    endScreen.style.display = 'block';
+}
 
+function startGame() {
+    
+    startButton.style.display = 'none';
+    endScreen.style.display = 'none';
+    
     world = new World(canvas, keyboard);
+    
+}
+
+function playAgain() {
+    world = null;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    startGame();
+    startButton.style.display = 'none';
+    
 }
 
 function fullScreenButton() {
     let fullScreenButton = document.getElementById('fullScreenButton');
-    let canvas = document.querySelector('canvas'); 
     fullScreenButton.addEventListener('click', () => {
         if (document.fullscreenElement) {
             document.exitFullscreen();

@@ -8,7 +8,6 @@ body {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    align-items: center;
     margin: 0;
     background-image: url('img/desert.png');
     background-position: center;
@@ -24,6 +23,16 @@ h1 {
     margin: 0;
 }
 
+#game {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
 canvas {
     background-color: black;
     display: block;
@@ -35,7 +44,7 @@ canvas {
 #startButton {
     display: none;
     position: absolute;
-    top: 56%;
+    top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     cursor: pointer;
@@ -46,16 +55,48 @@ canvas {
 
 #fullScreenButton {
     position: absolute;
-    bottom: 80px;
-    right: 70px;
+    bottom: 50px;
+    left: 70%;
+    transform: translateX(-50%);
     cursor: pointer;
     background-color: rgb(213, 145, 60);
     color: black;
     border-radius: 8px;
-    padding: 10px;
+    padding: 10px 20px;
+    font-size: 18px;
 }
 
 #fullScreenButton:hover {
+    background-color: rgb(180, 112, 28);
+}
+
+#endScreen {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 80%;
+    height: 100%;
+    transform: translate(12%, 0%);
+    background: url('img/9_intro_outro_screens/win/win_2.png') no-repeat center center;
+    background-size: contain;
+    z-index: 10;
+}
+
+#playAgainButton {
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: pointer;
+    background-color: rgb(213, 145, 60);
+    color: black;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 18px;
+}
+
+#playAgainButton:hover {
     background-color: rgb(180, 112, 28);
 }
 

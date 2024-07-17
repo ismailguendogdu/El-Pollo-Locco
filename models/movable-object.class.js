@@ -94,6 +94,4 @@ class MovableObject extends DrawableObject {
     //             (this.Y + this.offsetY + this.height) >= obj.Y &&
     //             (this.Y + this.offsetY) <= (obj.Y + obj.height) && 
     //             obj.onCollisionCourse;
-
-   
 }
