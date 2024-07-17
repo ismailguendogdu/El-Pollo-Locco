@@ -8,6 +8,6 @@ class Coins extends MovableObject {
     constructor(imagePath, x) {
         super().loadImage(imagePath);
         this.x = x;
-        this.y = 350;
+        this.y = 100 + Math.random() * 200;
     }
 }

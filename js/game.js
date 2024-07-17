@@ -14,6 +14,7 @@ function init() {
 
     // startButton.style.display = 'block';
     // startButton.addEventListener('click', startGame);
+    fullScreenButton();
 
 }
 
@@ -30,6 +31,18 @@ function startGame() {
     startButton.style.display = 'none';
 
     world = new World(canvas, keyboard);
+}
+
+function fullScreenButton() {
+    let fullScreenButton = document.getElementById('fullScreenButton');
+    let canvas = document.querySelector('canvas'); 
+    fullScreenButton.addEventListener('click', () => {
+        if (document.fullscreenElement) {
+            document.exitFullscreen();
+        } else {
+            canvas.requestFullscreen();
+        }
+    });
 }
 
 window.addEventListener('keydown', (e) => {

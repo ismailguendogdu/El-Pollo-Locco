@@ -8,10 +8,12 @@ class World {
     statusBar = new StatusBar();
     statusBarBottles = new StatusBarBottles();
     statusBarCoins = new StatusBarCoins();
+    statusBarEndboss = new StatusBarEndboss();
     throwableObjects = [];
     // salsaBottles = [];
     // coins = [];
     collectBottles = 0;
+    
 
  
 
@@ -52,7 +54,7 @@ class World {
 
     checkCollisions() {
         this.level.enemies.forEach((enemy, i) => {
-            if (!enemy.isDeadChicken &&this.character.isColliding(enemy)) {
+            if (!enemy.isDeadChicken && this.character.isColliding(enemy)) {
                 if (this.character.y + this.character.height - 50 < enemy.y 
                     && this.character.speedY <= 0) {
                     enemy.dieChicken();
@@ -66,6 +68,36 @@ class World {
             }
         });
     }
+        
+    checkCollisionsEndboss(bottle, boss) {
+        if (bottle.isColliding(boss)) {
+            boss.hit();
+            boss.energyEndboss -= 20;
+            this.statusBarEndboss.setPercentage(boss.energyEndboss);
+    
+            if (boss.energyEndboss > 0) {
+                boss.isHurt();
+            } else {
+                boss.dieEndboss();
+            }
+        }
+    }
+    
+    checkThrowBottleCollisions() {
+        this.throwableObjects.forEach((bottle, b) => {
+            this.level.enemies.forEach((enemy, e) => {
+                if (bottle.isColliding(enemy)) {
+                    if (enemy instanceof Endboss) {
+                        this.checkCollisionsEndboss(bottle, enemy);
+                    } else {
+                        this.level.enemies.splice(e, 1); 
+                        this.throwableObjects.splice(b, 1); 
+                    }
+                }
+            });
+        });
+    }
+    
 
     checkCollisionsBottles() {
         this.level.salsaBottles.forEach((bottle, i) => {
@@ -89,17 +121,8 @@ class World {
         });
     }
 
-    checkThrowBottleCollisions() {
-        this.throwableObjects.forEach((bottle,b) => {
-            this.level.enemies.forEach((enemy,e) => {
-                if(bottle.isColliding(enemy)) {
-                    this.level.enemies.splice(e, 1);
-                    this.throwableObjects.splice(b, 1);
-                }
-            });
-        });
-    }
-
+ 
+    
 
     // Draw() wird immer wieder aufgerufen
     draw() {
@@ -112,6 +135,7 @@ class World {
         this.addToMap(this.statusBar);
         this.addToMap(this.statusBarBottles);
         this.addToMap(this.statusBarCoins);
+        this.addToMap(this.statusBarEndboss);
         this.ctx.translate(this.camera_x, 0); // Forward
 
         this.addToMap(this.character);
@@ -120,6 +144,7 @@ class World {
         this.addObjectsToMap(this.level.salsaBottles);
         this.addObjectsToMap(this.level.coins);
         this.addObjectsToMap(this.throwableObjects);
+        
 
         this.ctx.translate(-this.camera_x, 0);
 

@@ -7,6 +7,10 @@ const level1 = new Level(
         new Chicken(),
         new Chicken(),
         new Chicken(),
+        new Chicken(),
+        new Chicken(),
+        new Chicken(),
+        new Chicken(),
         new Endboss(),
     ],
 
@@ -57,11 +61,15 @@ const level1 = new Level(
     ],
 
     [
-        new Coins('img/8_coin/coin_1.png',150),
+        new Coins('img/8_coin/coin_1.png',100),
         new Coins('img/8_coin/coin_1.png',250),
         new Coins('img/8_coin/coin_1.png',350),
         new Coins('img/8_coin/coin_1.png',450),
-        new Coins('img/8_coin/coin_1.png',550)
+        new Coins('img/8_coin/coin_1.png',550),
+        new Coins('img/8_coin/coin_1.png',650),
+        new Coins('img/8_coin/coin_1.png',750),
+        new Coins('img/8_coin/coin_1.png',850),
+        new Coins('img/8_coin/coin_1.png',950)
     ]
 
 );

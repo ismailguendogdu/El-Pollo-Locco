@@ -8,6 +8,8 @@ class MovableObject extends DrawableObject {
     lastHit = 0;
     bottleBar = 0;
     coinsBar = 0;
+    energyEndboss = 100;
+    
 
 
 

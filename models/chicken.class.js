@@ -10,8 +10,8 @@ class Chicken extends MovableObject {
         'img/3_enemies_chicken/chicken_normal/1_walk/3_w.png',
     ];
 
-    IMAGE_DEAD = 'img/3_enemies_chicken/chicken_normal/2_dead/dead.png';
-    isDeadChicken = false;
+    IMAGES_DEAD = 'img/3_enemies_chicken/chicken_normal/2_dead/dead.png';
+    
 
 
 
@@ -21,6 +21,9 @@ class Chicken extends MovableObject {
 
     this.x = 200 + Math.random() * 500; // Zahl zwischen 200 und 700
     this.speed = 0.15 + Math.random() * 0.5;
+
+    this.isDeadChicken = false;
+    this.isRemovable = false;
     
     this.animate();
     }
@@ -41,7 +44,7 @@ class Chicken extends MovableObject {
     }
 
     dieChicken() {
-        this.loadImage(this.IMAGE_DEAD); 
+        this.loadImage(this.IMAGES_DEAD); 
         this.isDeadChicken = true;
         setTimeout(() => {
             this.removeChicken();

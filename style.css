@@ -44,6 +44,21 @@ canvas {
     max-width: 100%;
 }
 
+#fullScreenButton {
+    position: absolute;
+    bottom: 80px;
+    right: 70px;
+    cursor: pointer;
+    background-color: rgb(213, 145, 60);
+    color: black;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+#fullScreenButton:hover {
+    background-color: rgb(180, 112, 28);
+}
+
 @media only screen and (max-width: 720px) {
     canvas {
         width: 100%;
