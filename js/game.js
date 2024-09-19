@@ -26,30 +26,41 @@ function drawStartScreen() {
     startImage.src = 'img/9_intro_outro_screens/start/startscreen_2.png';
     startImage.onload = () => {
         ctx.drawImage(startImage, 0, 0, canvas.width, canvas.height);
-        startButton.style.display = 'block'; 
+        startButton.style.display = 'flex'; 
     };
-}
-
-function drawEndScreen() {
-    endScreen.style.display = 'block';
 }
 
 function startGame() {
     
+    initLevel();
     startButton.style.display = 'none';
     endScreen.style.display = 'none';
-    
     world = new World(canvas, keyboard);
     
 }
 
+// function drawEndScreen() {
+//     endScreen.style.display = 'none';
+// }
+
+
+
 function playAgain() {
-    world = null;
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    startGame();
+
+    initLevel();
     startButton.style.display = 'none';
+    endScreen.style.display = 'none';
+    world = new World(canvas, keyboard);
+    // console.log("Play again clicked"); 
+    // endScreen.style.display = 'none'; 
+    // startButton.style.display = 'none';
+    // world = null; 
+    // ctx.clearRect(0, 0, canvas.width, canvas.height);
     
+    // startGame();
+    // console.log("Game restarted");
 }
+
 
 function fullScreenButton() {
     let fullScreenButton = document.getElementById('fullScreenButton');
@@ -61,6 +72,33 @@ function fullScreenButton() {
         }
     });
 }
+
+
+const walking_sound = new Audio('audio/walking.mp3');
+const jumping_sound = new Audio('audio/jump.mp3');
+
+const allSounds = [walking_sound, jumping_sound];
+
+let isMuted = false;
+
+
+function toggleAllSounds() {
+    const volumeButton = document.getElementById('volumeButton').querySelector('i');
+    isMuted = !isMuted;
+
+    if (isMuted) {
+        volumeButton.classList.remove('fa-volume-high');
+        volumeButton.classList.add('fa-volume-xmark');
+    } else {
+        volumeButton.classList.remove('fa-volume-xmark');
+        volumeButton.classList.add('fa-volume-high');
+    }
+    allSounds.forEach(sound => {
+        sound.muted = isMuted;
+    });
+}
+
+
 
 window.addEventListener('keydown', (e) => {
     if(e.keyCode == 39) {

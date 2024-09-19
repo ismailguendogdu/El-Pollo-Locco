@@ -9,7 +9,7 @@ class StatusBar extends DrawableObject {
         'img/7_statusbars/1_statusbar/2_statusbar_health/blue/100.png' // 5
     ];
 
-    percetage = 100;
+    percetage = 200;
 
     constructor() {
         super();
@@ -18,7 +18,7 @@ class StatusBar extends DrawableObject {
         this.y = 0;
         this.width = 200;
         this.height = 60;
-        this.setPercentage(100);
+        this.setPercentage(200);
     }
 
     //setPercentage(50)
@@ -30,15 +30,15 @@ class StatusBar extends DrawableObject {
     }
     
         resolveImageIndex() {
-            if(this.percetage == 100) {
+            if(this.percetage == 200) {
                 return 5;
-            } else if(this.percetage > 80) {
+            } else if(this.percetage >= 80) {
                 return 4;
-            } else if(this.percetage > 60) {
+            } else if(this.percetage >= 60) {
                 return 3;
-            } else if(this.percetage > 40) {
+            } else if(this.percetage >= 40) {
                 return 2;
-            } else if(this.percetage > 20) {
+            } else if(this.percetage >= 20) {
                 return 1;
             } else {
                 return 0;

@@ -62,26 +62,28 @@ class World {
                     setTimeout(() => {
                         this.level.enemies.splice(i, 1);
                     }, 1000);
-                } else {
+                } 
+                else if (this.character.y + this.character.height >= enemy.y) {
                     this.character.hit();
                     this.statusBar.setPercentage(this.character.energy);
-                }   
+                }
             }
         });
     }
+    
         
     checkCollisionsEndboss(bottle, boss) {
         if (bottle.isColliding(boss)) {
             boss.isHurt();
             boss.hit();
-            boss.energyEndboss -=20;
+            boss.energyEndboss -= 20;
             this.statusBarEndboss.setPercentage(boss.energyEndboss);
-            // console.log('endboss hat noch', boss.energyEndboss);
+            
             if (boss.energyEndboss > 0) {
                 boss.isHurt();
-            } if (boss.energyEndboss <= 0) {
+            } else if (boss.energyEndboss <= 0) {
                 boss.dieEndboss();
-                this.endGame();
+                this.endGame('win');
             }
         }
     }
@@ -124,14 +126,26 @@ class World {
         });
     }
 
-    endGame() {
-        this.gameEnded = true; 
-        document.getElementById('endScreen').style.display = 'block'; 
+    endGame(result) {
+        this.gameEnded = true;
+        const endScreen = document.getElementById('endScreen');
+        endScreen.style.display = 'block';
+    
+        if (result === 'win') {
+            endScreen.style.backgroundImage = "url('img/9_intro_outro_screens/win/win_2.png')";
+        } else if (result === 'lose') {
+            endScreen.style.backgroundImage = "url('img/9_intro_outro_screens/game_over/oh no you lost!.png')";
+        }
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     }
+    
     
 
     // Draw() wird immer wieder aufgerufen
     draw() {
+
+        if (this.gameEnded) return;
+
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         this.ctx.translate(this.camera_x, 0);

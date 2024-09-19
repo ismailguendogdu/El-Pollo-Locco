@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html translate="no">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -33,12 +33,21 @@
     <h1>El Pollo Locco</h1>
     <div id="game">
         <canvas id="canvas" width="720" height="480"></canvas>
-        <img id="startButton" src="img/playImage.png" alt="Start Button" onclick="startGame()">
-        <div id="endScreen">
-            <button id="playAgainButton">Play Again</button>
+        <img id="startButton" src="img/playImage.png" alt="Start Button" onclick="initLevel()">
+        
+        <div class="controls">
+            <button id="fullScreenButton"><i class="fa-solid fa-up-right-and-down-left-from-center"></i></button>
+            <button id="volumeButton" onclick="toggleAllSounds()">
+                <i class="fa-solid fa-volume-high"></i>
+            </button>
+            <button id="controlButton"><i class="fa-solid fa-bars"></i></button>
+            <div></div>
+           
         </div>
-        <button id="fullScreenButton"><i class="fa-solid fa-up-right-and-down-left-from-center"></i></button>
-    </div>
 
+    </div>
+    <div id="endScreen">
+        <button id="playAgainButton">Play Again</button>
+    </div>
 </body>
 </html>

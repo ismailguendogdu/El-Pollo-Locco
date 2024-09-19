@@ -3,6 +3,14 @@ class Character extends MovableObject {
     height = 250;
     y = 80;
     speed = 10;
+
+    offset = {
+        top: 120,
+        left: 40,
+        right: 30,
+        bottom: 30
+    };
+
     IMAGES_WALKING = [
         'img/2_character_pepe/2_walk/W-21.png',
         'img/2_character_pepe/2_walk/W-22.png',
@@ -69,6 +77,16 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_IDLE);
         this.applyGravity();
         this.animate();
+    }
+
+    hit() {
+        super.hit();
+        this.energy -= 10;
+        if (this.energy <= 0) {
+            this.energy = 0;
+            this.world.endGame('lose');
+        }
+        this.world.statusBar.setPercentage(this.energy);
     }
 
     animate() {
