@@ -1,12 +1,12 @@
 class StatusBar extends DrawableObject {
 
     IMAGES = [
-        'img/7_statusbars/1_statusbar/2_statusbar_health/blue/0.png', // 0
+        'img/7_statusbars/1_statusbar/2_statusbar_health/blue/0.png', 
         'img/7_statusbars/1_statusbar/2_statusbar_health/blue/20.png',
         'img/7_statusbars/1_statusbar/2_statusbar_health/blue/40.png',
         'img/7_statusbars/1_statusbar/2_statusbar_health/blue/60.png',
         'img/7_statusbars/1_statusbar/2_statusbar_health/blue/80.png',
-        'img/7_statusbars/1_statusbar/2_statusbar_health/blue/100.png' // 5
+        'img/7_statusbars/1_statusbar/2_statusbar_health/blue/100.png' 
     ];
 
     percetage = 200;
@@ -21,9 +21,9 @@ class StatusBar extends DrawableObject {
         this.setPercentage(200);
     }
 
-    //setPercentage(50)
+    
     setPercentage(percetage) {
-        this.percetage = percetage; // => 0...5
+        this.percetage = percetage;
         let path = this.IMAGES[this.resolveImageIndex()];
         this.img = this.imageCache[path];
 
@@ -32,13 +32,13 @@ class StatusBar extends DrawableObject {
         resolveImageIndex() {
             if(this.percetage == 200) {
                 return 5;
-            } else if(this.percetage >= 80) {
+            } else if(this.percetage >= 160) {
                 return 4;
-            } else if(this.percetage >= 60) {
+            } else if(this.percetage >= 120) {
                 return 3;
-            } else if(this.percetage >= 40) {
+            } else if(this.percetage >= 80) {
                 return 2;
-            } else if(this.percetage >= 20) {
+            } else if(this.percetage >= 40) {
                 return 1;
             } else {
                 return 0;

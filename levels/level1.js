@@ -44,7 +44,7 @@ function initLevel() {
     ],
 
     [
-        new SalsaBottles('img/6_salsa_bottle/1_salsa_bottle_on_ground.png',150),
+        new SalsaBottles('img/6_salsa_bottle/1_salsa_bottle_on_ground.png',220),
         new SalsaBottles('img/6_salsa_bottle/2_salsa_bottle_on_ground.png',260),
         new SalsaBottles('img/6_salsa_bottle/1_salsa_bottle_on_ground.png',360),
         new SalsaBottles('img/6_salsa_bottle/2_salsa_bottle_on_ground.png',450),
@@ -68,6 +68,5 @@ function initLevel() {
         new Coins('img/8_coin/coin_1.png',850),
         new Coins('img/8_coin/coin_1.png',950)
     ]
-
 );
 }

@@ -38,7 +38,6 @@ canvas {
     display: block;
     border-radius: 10px;
     position: relative;
-    /* border: 8px solid black; */
 }
 
 #startButton {
@@ -63,10 +62,6 @@ canvas {
 }
 
 #fullScreenButton {
-    /* position: relative;
-    bottom: -10px;
-    right: 10px; */
-    /* transform: translateX(-50%); */
     cursor: pointer;
     background-color: rgb(213, 145, 60);
     color: black;
@@ -76,10 +71,6 @@ canvas {
 }
 
 #volumeButton {
-    /* position: relative; */
-    /* bottom: -10px;
-    right: 40px; */
-    /* transform: translateX(-50%); */
     cursor: pointer;
     background-color: rgb(213, 145, 60);
     color: black;
@@ -89,10 +80,6 @@ canvas {
 }
 
 #controlButton {
-    /* position: relative; */
-    /* bottom: -10px;
-    right: 40px; */
-    /* transform: translateX(-50%); */
     cursor: pointer;
     background-color: rgb(213, 145, 60);
     color: black;
@@ -110,19 +97,17 @@ canvas {
     position: absolute;
     top: 0;
     left: 0;
-   right: 0;
-   bottom: 0;
-    
+    right: 0;
+    bottom: 0;
     background: no-repeat center center;
-    background-size: cover;
+    background-size: 60%;
     background-position: center;
-    background-image: url('img/9_intro_outro_screens/game_over/you lost.png');
     z-index: 10;
 }
 
 #playAgainButton {
     position: absolute;
-    bottom: 170px;
+    bottom: 230px;
     left: 50%;
     transform: translateX(-50%);
     cursor: pointer;
@@ -138,6 +123,10 @@ canvas {
     background-color: rgb(180, 112, 28);
 }
 
+.mobileControls {
+    display: none;
+}
+
 @media only screen and (max-width: 720px) {
     canvas {
         width: 100%;
@@ -146,11 +135,44 @@ canvas {
     h1 {
         display: none;
      }
+
+
 }
 
 @media only screen and (max-height: 480px) {
     canvas {
         height: 100vh;
         border-radius: 0;
+    }
+
+    .controls {
+        display: none;
+    }
+
+    .mobileControls {
+        width: 90%;
+        display: flex;
+        font-size: 36px;
+        justify-content: space-between;
+        position: absolute;
+        bottom: 20px;
+    }
+
+    #playAgainButton {
+        bottom: 50px;
+    }
+
+    #endScreen {
+        background-size: 80%;
+    }
+
+    .arrowRightLeft {
+        display: flex;
+        gap: 24px;
+    }
+
+    .arrowUpAtack  {
+        display: flex;
+        gap: 24px;
     }
 }

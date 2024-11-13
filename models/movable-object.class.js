@@ -46,24 +46,33 @@ class MovableObject extends DrawableObject {
 
     collectBottle() {
         this.bottleBar += 20;
-    }
-
-    collectCoins() {
-        this.coinsBar += 20;
-    }
-
-    hit() {
-        this.energy -= 20;
-        if(this.energy < 0) {
-            this.energy = 0;
-        } else {
-            this.lastHit = new Date().getTime();
+        if (this.bottleBar > 100) {
+            this.bottleBar = 100;
         }
     }
 
+    collectCoins() {
+        this.coinsBar += 11.11;
+        if (this.coinsBar > 100) {
+            this.coinsBar = 100;
+        }
+    }
+
+    hit() {
+
+        this.lastHit = new Date().getTime();
+        
+        // this.energy -= 10;
+        // if(this.energy < 0) {
+        //     this.energy = 0;
+        // } else {
+        //     this.lastHit = new Date().getTime();
+        // }
+    }
+
     isHurt() {
-        let timepassed = new Date().getTime() - this.lastHit; // Difference in ms
-        timepassed = timepassed / 1000; // Difference in s
+        let timepassed = new Date().getTime() - this.lastHit;
+        timepassed = timepassed / 1000;
         return timepassed < 1;
     }
 

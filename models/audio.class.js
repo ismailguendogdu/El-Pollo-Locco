@@ -1,5 +1,5 @@
 
-// audio.class.js
+
 export default class AudioManager {
     constructor() {
         this.walking_sound = new Audio('audio/walking.mp3');

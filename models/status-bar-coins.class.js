@@ -18,27 +18,30 @@ class StatusBarCoins extends DrawableObject {
         this.y = 0;
         this.width = 200;
         this.height = 60;
-        this.setPercentage();
+        this.setPercentage(0);
     }
 
-    //setPercentage(50)
-    setPercentage(percetage) {
-        this.percetage = percetage; // => 0...5
+    setPercentage(percentage) {
+        this.percentage = percentage;
+        if (this.percentage > 100) {
+            this.percentage = 100;
+        } else if (this.percentage < 0) {
+            this.percentage = 0;
+        }
         let path = this.IMAGES[this.resolveImageIndex()];
         this.img = this.imageCache[path];
-
     }
 
     resolveImageIndex() {
         if(this.percetage == 100) {
             return 5;
-        } else if(this.percetage > 80) {
+        } else if(this.percetage >= 80) {
             return 4;
-        } else if(this.percetage > 60) {
+        } else if(this.percetage >= 60) {
             return 3;
-        } else if(this.percetage > 40) {
+        } else if(this.percetage >= 40) {
             return 2;
-        } else if(this.percetage > 20) {
+        } else if(this.percetage >= 20) {
             return 1;
         } else {
             return 0;

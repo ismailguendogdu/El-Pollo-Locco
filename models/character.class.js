@@ -4,6 +4,14 @@ class Character extends MovableObject {
     y = 80;
     speed = 10;
 
+
+    isDashing = false;
+    dashDistance = 300;
+    dashDuration = 200;
+    dashCooldown = 1000; 
+    lastDashTime = 0;
+
+
     offset = {
         top: 120,
         left: 40,
@@ -75,46 +83,105 @@ class Character extends MovableObject {
         this.loadImages(this.IMAGES_DEAD);
         this.loadImages(this.IMAGES_HURT);
         this.loadImages(this.IMAGES_IDLE);
+
+
+        if (!window.walking_sound) {
+            window.walking_sound = new Audio('audio/walking.mp3');
+            window.allSounds.push(window.walking_sound);
+        }
+
+        if (!window.jumping_sound) {
+            window.jumping_sound = new Audio('audio/jump.mp3');
+            window.allSounds.push(window.jumping_sound);
+        }
+
+        this.walking_sound = window.walking_sound;
+        this.jumping_sound = window.jumping_sound;
+        
         this.applyGravity();
         this.animate();
     }
 
+    isInvulnerable() {
+        return this.isHurt();
+    }
+
     hit() {
-        super.hit();
-        this.energy -= 10;
-        if (this.energy <= 0) {
-            this.energy = 0;
-            this.world.endGame('lose');
+        
+        if (!this.isInvulnerable()) {
+            this.energy -= 20;
+            if (this.energy <= 0) {
+                this.energy = 0;
+                this.world.endGame('lose');
+            } else {
+                this.lastHit = new Date().getTime();
+            }
+            this.world.statusBar.setPercentage(this.energy);
         }
-        this.world.statusBar.setPercentage(this.energy);
+    }
+
+    dash() {
+        if (!this.isDashing && this.canDash()) {
+            this.isDashing = true;
+            this.lastDashTime = new Date().getTime();
+    
+            let dashDirection = this.otherDirection ? -1 : 1;
+            let totalDashDistance = dashDirection * this.dashDistance;
+            let dashStartTime = new Date().getTime();
+            let startX = this.x; 
+    
+            let dashInterval = setInterval(() => {
+                let currentTime = new Date().getTime();
+                let elapsedTime = currentTime - dashStartTime;
+                let progress = elapsedTime / this.dashDuration;
+    
+                if (progress >= 1) {
+                    progress = 1;
+                }
+    
+                this.x = startX + (totalDashDistance * progress);
+                
+                this.x = Math.max(0, Math.min(this.x, this.world.level.level_end_x));
+    
+                if (progress >= 1) {
+                    clearInterval(dashInterval);
+                    this.isDashing = false;
+                }
+            }, 1000 / 60); 
+        }
+    }
+
+    canDash() {
+        let currentTime = new Date().getTime();
+        return (currentTime - this.lastDashTime) >= this.dashCooldown;
     }
 
     animate() {
 
         setInterval(() => {
             this.walking_sound.pause();
-            if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x) {
-               this.moveRight();
-               this.otherDirection = false;
-               this.walking_sound.play();
-               this.resetIdleTime();
-            }
-            if (this.world.keyboard.LEFT && this.x > 0) {
+    
+            if (this.world.keyboard.SHIFT && !this.isDashing) {
+                this.dash();
+            } else if (this.world.keyboard.RIGHT && this.x < this.world.level.level_end_x && !this.isDashing) {
+                this.moveRight();
+                this.otherDirection = false;
+                this.walking_sound.play();
+                this.resetIdleTime();
+            } else if (this.world.keyboard.LEFT && this.x > 0 && !this.isDashing) {
                 this.moveLeft();
                 this.otherDirection = true;
                 this.walking_sound.play();
                 this.resetIdleTime();
             }
-
-            if(this.world.keyboard.SPACE && !this.isAboveGround()) {
+    
+            if (this.world.keyboard.SPACE && !this.isAboveGround() && !this.isDashing) {
                 this.jump();
                 this.jumping_sound.play();
                 this.resetIdleTime();
             }
             this.world.camera_x = -this.x + 100;
         }, 1000 / 60);
-
-
 
         setInterval(() => {
             if(this.isDead()) {
@@ -128,7 +195,7 @@ class Character extends MovableObject {
             } else {
                 this.startIdleTime();
             }  
-        }, 50); 
+        }, 50);
         
         this.playAnimation(this.IMAGES_IDLE);
     }

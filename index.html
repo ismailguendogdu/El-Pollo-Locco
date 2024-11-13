@@ -34,15 +34,25 @@
     <div id="game">
         <canvas id="canvas" width="720" height="480"></canvas>
         <img id="startButton" src="img/playImage.png" alt="Start Button" onclick="initLevel()">
+
+        <div class="mobileControls">
+            <div class="arrowRightLeft">
+                <i class="fa-regular fa-circle-left" id="leftBtn"></i>
+                <i class="fa-regular fa-circle-right" id="rightBtn"></i>
+            </div>
+            <div class="arrowUpAtack">
+                <i class="fa-regular fa-circle-up" id="upBtn"></i>
+                <i class="fa-solid fa-wine-bottle" id="attackBtn"></i>
+            </div>
+        </div>
+        
         
         <div class="controls">
             <button id="fullScreenButton"><i class="fa-solid fa-up-right-and-down-left-from-center"></i></button>
-            <button id="volumeButton" onclick="toggleAllSounds()">
+            <button  id="volumeButton" onclick="toggleAllSounds()">
                 <i class="fa-solid fa-volume-high"></i>
             </button>
-            <button id="controlButton"><i class="fa-solid fa-bars"></i></button>
-            <div></div>
-           
+            <button id="controlButton"><i class="fa-solid fa-bars"></i></button>           
         </div>
 
     </div>
