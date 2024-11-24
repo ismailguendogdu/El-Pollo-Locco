@@ -29,8 +29,8 @@ h1 {
     align-items: center;
     justify-content: center;
     position: relative;
-    width: 100%;
-    height: 100%;
+    width: 80%;
+    height: 60%;
 }
 
 canvas {
@@ -126,6 +126,109 @@ canvas {
 .mobileControls {
     display: none;
 }
+
+.privacy-text {
+    display: none; 
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 600px;
+    padding: 20px;
+    background-color: rgb(180, 112, 28);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    border-radius: 10px;
+  }
+
+  .privacy-text .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    font-weight: bold;
+    color: #444;
+    cursor: pointer;
+  }
+
+  .privacy-text .close-btn:hover {
+    color: red;
+  }
+
+  .overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+  }
+
+  .privacy-text.active,
+  .overlay.active {
+    display: flex; 
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+
+  .popup {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    width: 300px;
+    text-align: center;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  }
+
+  .popup h3 {
+    margin-top: 0;
+  }
+
+  .popup ul {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+  }
+
+  .popup ul li {
+    margin: 5px 0;
+    font-size: 16px;
+  }
+
+  .popup .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: #888;
+  }
+
+  .popup .close-btn:hover {
+    color: red;
+  }
+
+  .popup.active,
+  .overlay.active {
+    display: block;
+  }
 
 @media only screen and (max-width: 720px) {
     canvas {

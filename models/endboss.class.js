@@ -41,18 +41,18 @@ class Endboss extends MovableObject {
   }
 
   animate() {
-    // this.isDamage
+    
     setInterval(() => {
         if (!this.isDeadChicken) {
             if(this.isDamage){
-                this.playAnimation(this.IMAGES_HURT); // TODO
+                this.playAnimation(this.IMAGES_HURT); 
             } else {
                 this.moveLeft();
             }
 
             setTimeout(() => {
                 this.isDamage = false;
-            }, 1000); // TODO 
+            }, 2000); 
 
         } 
         else if (this.isHurt()) {
@@ -64,7 +64,7 @@ class Endboss extends MovableObject {
         if (!this.isDeadChicken) {
             this.playAnimation(this.IMAGES_WALKING);
         }
-    }, 500);
+    }, 2000);
 }
 
 hit() {

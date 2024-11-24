@@ -6,8 +6,7 @@ let ctx;
 let playAgainButton;
 let endScreen;
 
-document.addEventListener('DOMContentLoaded', () => {
-    
+function init() {
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');
     startButton = document.getElementById('startButton');
@@ -20,71 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     startButton.addEventListener('click', startGame);
     playAgainButton.addEventListener('click', playAgain);
     fullScreenButton();
-
- 
-    document.getElementById("leftBtn")?.addEventListener("touchstart", () => {
-        keyboard.LEFT = true;
-        simulateKeydown(37);
-    });
-
-    document.getElementById("rightBtn")?.addEventListener("touchstart", () => {
-        keyboard.RIGHT = true;
-        simulateKeydown(39);  
-    });
-
-    document.getElementById("attackBtn")?.addEventListener("touchstart", () => {
-        keyboard.UP = true;
-        simulateKeydown(68);  
-    });
-
-    document.getElementById("upBtn")?.addEventListener("touchstart", () => {
-        keyboard.SPACE = true;  
-        simulateKeydown(38); 
-    });
-
-    
-    document.getElementById("leftBtn")?.addEventListener("touchend", () => {
-        keyboard.LEFT = false;
-        simulateKeyup(37);  
-    });
-
-    document.getElementById("rightBtn")?.addEventListener("touchend", () => {
-        keyboard.RIGHT = false;
-        simulateKeyup(39);  
-    });
-
-    document.getElementById("attackBtn")?.addEventListener("touchend", () => {
-        keyboard.UP = false;
-        simulateKeyup(68); 
-    });
-
-    document.getElementById("upBtn")?.addEventListener("touchend", () => {
-        keyboard.SPACE = false; 
-        simulateKeyup(38); 
-    });
-
-
-    window.addEventListener('keydown', (e) => {
-        if(e.keyCode == 39) { keyboard.RIGHT = true; }
-        if(e.keyCode == 37) { keyboard.LEFT = true; }
-        if(e.keyCode == 38) { keyboard.UP = true; }
-        if(e.keyCode == 40) { keyboard.DOWN = true; }
-        if(e.keyCode == 32) { keyboard.SPACE = true; }
-        if(e.keyCode == 68) { keyboard.D = true; }
-        if (e.keyCode == 16) { keyboard.SHIFT = true; }
-    });
-
-    window.addEventListener('keyup', (e) => {
-        if(e.keyCode == 39) { keyboard.RIGHT = false; }
-        if(e.keyCode == 37) { keyboard.LEFT = false; }
-        if(e.keyCode == 38) { keyboard.UP = false; }
-        if(e.keyCode == 40) { keyboard.DOWN = false; }
-        if(e.keyCode == 32) { keyboard.SPACE = false; }
-        if(e.keyCode == 68) { keyboard.D = false; }
-        if (e.keyCode == 16) { keyboard.SHIFT = false; }
-    });
-});
-
+}
 
 function drawStartScreen() {
     const startImage = new Image();
@@ -95,13 +30,15 @@ function drawStartScreen() {
     };
 }
 
-
 function startGame() {
+   
     window.allSounds = [];
+
     initLevel();
     startButton.style.display = 'none';
     endScreen.style.display = 'none';
     world = new World(canvas, keyboard);
+
     window.allSounds.forEach(sound => {
         sound.muted = window.isMuted;
     });
@@ -109,6 +46,7 @@ function startGame() {
 
 
 function playAgain() {
+
     initLevel();
     startButton.style.display = 'none';
     endScreen.style.display = 'none';
@@ -125,17 +63,6 @@ function fullScreenButton() {
             canvas.requestFullscreen();
         }
     });
-}
-
-
-function simulateKeydown(keyCode) {
-    const event = new KeyboardEvent('keydown', { keyCode: keyCode });
-    window.dispatchEvent(event);
-}
-
-function simulateKeyup(keyCode) {
-    const event = new KeyboardEvent('keyup', { keyCode: keyCode });
-    window.dispatchEvent(event);
 }
 
 
@@ -157,3 +84,64 @@ function toggleAllSounds() {
         sound.muted = window.isMuted;
     });
 }
+
+window.addEventListener('keydown', (e) => {
+    if(e.keyCode == 39) {
+        keyboard.RIGHT = true;
+    }
+
+    if(e.keyCode == 37) {
+        keyboard.LEFT = true;
+    }
+    
+    if(e.keyCode == 38) {
+        keyboard.UP = true;
+    }
+    
+    if(e.keyCode == 40) {
+        keyboard.DOWN = true;
+    }
+
+    if(e.keyCode == 32) {
+        keyboard.SPACE = true;
+    }
+
+    if(e.keyCode == 68) {
+        keyboard.D = true;
+    }
+
+    if (e.keyCode == 16) { 
+        keyboard.SHIFT = true;
+    }
+
+});
+
+window.addEventListener('keyup', (e) => {
+    if(e.keyCode == 39) {
+        keyboard.RIGHT = false;
+    }
+
+    if(e.keyCode == 37) {
+        keyboard.LEFT = false;
+    }
+    
+    if(e.keyCode == 38) {
+        keyboard.UP = false;
+    }
+    
+    if(e.keyCode == 40) {
+        keyboard.DOWN = false;
+    }
+
+    if(e.keyCode == 32) {
+        keyboard.SPACE = false;
+    }
+
+    if(e.keyCode == 68) {
+        keyboard.D = false;
+    }
+
+    if (e.keyCode == 16) { 
+        keyboard.SHIFT = false;
+    }
+});

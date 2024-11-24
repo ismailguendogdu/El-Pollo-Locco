@@ -4,13 +4,13 @@ class Character extends MovableObject {
     y = 80;
     speed = 10;
 
-
     isDashing = false;
-    dashDistance = 300;
-    dashDuration = 200;
-    dashCooldown = 1000; 
+    dashDistance = 300; // 
+    dashDuration = 200; // dash animation
+    dashCooldown = 1000; // dash cooldown
     lastDashTime = 0;
 
+    
 
     offset = {
         top: 120,
@@ -106,10 +106,11 @@ class Character extends MovableObject {
         return this.isHurt();
     }
 
+
     hit() {
-        
+        // Enerji azaltımını burada yapılacak
         if (!this.isInvulnerable()) {
-            this.energy -= 20;
+            this.energy -= 20; // hasar miktarı
             if (this.energy <= 0) {
                 this.energy = 0;
                 this.world.endGame('lose');
@@ -119,7 +120,7 @@ class Character extends MovableObject {
             this.world.statusBar.setPercentage(this.energy);
         }
     }
-
+    
     dash() {
         if (!this.isDashing && this.canDash()) {
             this.isDashing = true;
@@ -128,7 +129,7 @@ class Character extends MovableObject {
             let dashDirection = this.otherDirection ? -1 : 1;
             let totalDashDistance = dashDirection * this.dashDistance;
             let dashStartTime = new Date().getTime();
-            let startX = this.x; 
+            let startX = this.x; // Dash başlangıcındaki x pozisyonu
     
             let dashInterval = setInterval(() => {
                 let currentTime = new Date().getTime();
@@ -139,17 +140,25 @@ class Character extends MovableObject {
                     progress = 1;
                 }
     
+                // Yeni x pozisyonunu hesapla
                 this.x = startX + (totalDashDistance * progress);
                 
+                // x değerini sınırlandırın
                 this.x = Math.max(0, Math.min(this.x, this.world.level.level_end_x));
     
                 if (progress >= 1) {
                     clearInterval(dashInterval);
                     this.isDashing = false;
                 }
-            }, 1000 / 60); 
+            }, 1000 / 60); // Her 16.67 ms'de bir çalışır (60 FPS)
         }
     }
+    
+    
+    
+    
+    
+    
 
     canDash() {
         let currentTime = new Date().getTime();
