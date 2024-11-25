@@ -185,7 +185,7 @@ canvas {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background: white;
+    background: rgb(180, 112, 28);
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -216,9 +216,9 @@ canvas {
     right: 10px;
     background: none;
     border: none;
-    font-size: 18px;
+    font-size: 24px;
     cursor: pointer;
-    color: #888;
+    color: #ece4e4;
   }
 
   .popup .close-btn:hover {

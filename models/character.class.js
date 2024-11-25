@@ -5,11 +5,10 @@ class Character extends MovableObject {
     speed = 10;
 
     isDashing = false;
-    dashDistance = 300; // 
-    dashDuration = 200; // dash animation
-    dashCooldown = 1000; // dash cooldown
+    dashDistance = 300;
+    dashDuration = 200;
+    dashCooldown = 1000;
     lastDashTime = 0;
-
     
 
     offset = {
@@ -106,11 +105,9 @@ class Character extends MovableObject {
         return this.isHurt();
     }
 
-
     hit() {
-        // Enerji azaltımını burada yapılacak
         if (!this.isInvulnerable()) {
-            this.energy -= 20; // hasar miktarı
+            this.energy -= 20; 
             if (this.energy <= 0) {
                 this.energy = 0;
                 this.world.endGame('lose');
@@ -129,7 +126,7 @@ class Character extends MovableObject {
             let dashDirection = this.otherDirection ? -1 : 1;
             let totalDashDistance = dashDirection * this.dashDistance;
             let dashStartTime = new Date().getTime();
-            let startX = this.x; // Dash başlangıcındaki x pozisyonu
+            let startX = this.x; 
     
             let dashInterval = setInterval(() => {
                 let currentTime = new Date().getTime();
@@ -139,27 +136,17 @@ class Character extends MovableObject {
                 if (progress >= 1) {
                     progress = 1;
                 }
-    
-                // Yeni x pozisyonunu hesapla
                 this.x = startX + (totalDashDistance * progress);
-                
-                // x değerini sınırlandırın
                 this.x = Math.max(0, Math.min(this.x, this.world.level.level_end_x));
     
                 if (progress >= 1) {
                     clearInterval(dashInterval);
                     this.isDashing = false;
                 }
-            }, 1000 / 60); // Her 16.67 ms'de bir çalışır (60 FPS)
+            }, 1000 / 60);
         }
     }
     
-    
-    
-    
-    
-    
-
     canDash() {
         let currentTime = new Date().getTime();
         return (currentTime - this.lastDashTime) >= this.dashCooldown;

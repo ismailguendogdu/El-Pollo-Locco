@@ -10,13 +10,9 @@ class World {
   statusBarCoins = new StatusBarCoins();
   statusBarEndboss = new StatusBarEndboss();
   throwableObjects = [];
-  // salsaBottles = [];
-  // coins = [];
   collectBottles = 0;
   gameEnded = false;
   
-
-
 
   constructor(canvas, keyboard) {
       this.ctx = canvas.getContext('2d');
@@ -27,11 +23,9 @@ class World {
       this.run();
   }
 
-
   setWorld() {
       this.character.world = this;
   }
-
 
   run() {
       setInterval(() => {
@@ -49,18 +43,16 @@ class World {
           let bottle = new ThrowableObject(bottleX, this.character.y, this.character.otherDirection);
           this.throwableObjects.push(bottle);
           this.collectBottles--;
-          this.character.bottleBar -= 20; // Enerji barını güncelle
+          this.character.bottleBar -= 20;
           this.statusBarBottles.setPercentage(this.character.bottleBar);
       }
   }
-
 
   checkCollisions() {
       this.level.enemies.forEach((enemy, i) => {
           if (!enemy.isDeadChicken && this.character.isColliding(enemy)) {
               if (enemy instanceof Endboss) {
-                  // Karakter Endboss ile çarpıştıysa
-                  this.character.energy = 0;
+                  this.character.energy = -20;
                   this.statusBar.setPercentage(this.character.energy);
                   this.endGame('lose');
               } else if (this.character.y + this.character.height - 50 < enemy.y 
@@ -79,15 +71,11 @@ class World {
           }
       });
   }
-  
-  
       
   checkCollisionsEndboss(bottle, boss, bottleIndex) {
       if (bottle.isColliding(boss)) {
           boss.hit();
           this.statusBarEndboss.setPercentage(boss.energyEndboss);
-  
-          // Şişeyi sahneden kaldır
           this.throwableObjects.splice(bottleIndex, 1);
   
           if (boss.energyEndboss <= 0) {
@@ -96,7 +84,6 @@ class World {
               setTimeout(() => {
                   this.endGame('win');
               }, 1000);
-
           }
       }
   }
@@ -116,16 +103,14 @@ class World {
       });
   }
   
-  
   checkCollisionsBottles() {
       this.level.salsaBottles.forEach((bottle, i) => {
           if (this.character.isColliding(bottle)) {
-              if (this.collectBottles < 5) { // Maksimum 5 şişe
+              if (this.collectBottles < 5) { 
                   this.collectBottles++;
                   this.character.collectBottle();
                   this.statusBarBottles.setPercentage(this.character.bottleBar);
               }
-              // Şişeyi her durumda kaldır
               this.level.salsaBottles.splice(i, 1);
           }
       });
@@ -142,8 +127,6 @@ class World {
   }
 
   endGame(result) {        
-      //
-
           if(this.gameEnded) return;
 
           this.gameEnded = true;
@@ -158,9 +141,7 @@ class World {
           this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
   
-  
 
-  // Draw() wird immer wieder aufgerufen
   draw() {
 
       if (this.gameEnded) return;
@@ -170,12 +151,12 @@ class World {
       this.ctx.translate(this.camera_x, 0);
       this.addObjectsToMap(this.level.backgroundObjects);
 
-      this.ctx.translate(-this.camera_x, 0); // Back
+      this.ctx.translate(-this.camera_x, 0);
       this.addToMap(this.statusBar);
       this.addToMap(this.statusBarBottles);
       this.addToMap(this.statusBarCoins);
       this.addToMap(this.statusBarEndboss);
-      this.ctx.translate(this.camera_x, 0); // Forward
+      this.ctx.translate(this.camera_x, 0);
 
       this.addToMap(this.character);
       this.addObjectsToMap(this.level.clouds);
@@ -229,7 +210,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const privacyBtn = document.querySelector('.privacy-btn');
     const privacyText = document.querySelector('.privacy-text');
     const overlay = document.createElement('div');
-    const closeBtn = document.querySelector('.close-btn');
     
     overlay.classList.add('overlay');
     document.body.appendChild(overlay);
@@ -240,7 +220,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   
     overlay.addEventListener('click', closePopup);
-    closeBtn.addEventListener('click', closePopup);
+    document.addEventListener('click', (event) => {
+      if (event.target.classList.contains('close-btn')) {
+        closePopup();
+      }
+    });
   
     function closePopup() {
       privacyText.classList.remove('active');
@@ -254,13 +238,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeBtn = document.querySelector('.close-btn');
     const overlay = document.querySelector('.overlay');
   
-    // Öffnet das Popup
     controlButton.addEventListener('click', () => {
       popup.classList.add('active');
       overlay.classList.add('active');
     });
   
-    // Schließt das Popup
     closeBtn.addEventListener('click', closePopup);
     overlay.addEventListener('click', closePopup);
   
