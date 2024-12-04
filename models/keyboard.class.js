@@ -7,14 +7,3 @@ class Keyboard {
     D = false;
     SHIFT = false;
 }
-
-
-
-// document.getElementById("btnLeft").addEventListener("touchstart", (e) => {
-//     e.preventDefault();
-//     keyboard.LEFT = true;
-//   });
-//   document.getElementById("btnLeft").addEventListener("touchend", (e) => {
-//     e.preventDefault();
-//     keyboard.LEFT = false;
-//   });

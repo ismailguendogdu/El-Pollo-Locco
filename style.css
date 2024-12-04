@@ -107,7 +107,7 @@ canvas {
 
 #playAgainButton {
     position: absolute;
-    bottom: 230px;
+    bottom: 250px;
     left: 50%;
     transform: translateX(-50%);
     cursor: pointer;
@@ -136,14 +136,18 @@ canvas {
     transform: translate(-50%, -50%);
     width: 80%;
     max-width: 600px;
+    max-height: 80vh; 
     padding: 20px;
     background-color: rgb(180, 112, 28);
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     z-index: 1000;
     border-radius: 10px;
-  }
+    overflow-y: auto;
+    scrollbar-width: thin; 
+    scrollbar-color: rgba(255,255,255,0.5) rgba(0,0,0,0.1); 
+}
 
-  .privacy-text .close-btn {
+.privacy-text .close-btn {
     position: absolute;
     top: 10px;
     right: 10px;
@@ -153,11 +157,25 @@ canvas {
     font-weight: bold;
     color: #444;
     cursor: pointer;
-  }
+    z-index: 1001; 
+}
 
-  .privacy-text .close-btn:hover {
+.privacy-text .close-btn:hover {
     color: red;
-  }
+}
+
+.privacy-text::-webkit-scrollbar {
+    width: 10px;
+}
+
+.privacy-text::-webkit-scrollbar-track {
+    background: rgba(0,0,0,0.1);
+}
+
+.privacy-text::-webkit-scrollbar-thumb {
+    background-color: rgba(255,255,255,0.5);
+    border-radius: 6px;
+}
 
   .overlay {
     display: none;
@@ -167,12 +185,12 @@ canvas {
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
-    z-index: 999;
+    z-index: 1000;
   }
 
   .privacy-text.active,
   .overlay.active {
-    display: flex; 
+    display: block; 
     align-items: center;
     justify-content: center;
     flex-direction: column;
@@ -239,6 +257,26 @@ canvas {
         display: none;
      }
 
+     .message-overlay {
+        display: none; 
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8); 
+        color: white; 
+        z-index: 1000; 
+        justify-content: center; 
+        align-items: center; 
+        flex-direction: column;
+    }
+    
+    .message {
+        text-align: center; 
+        padding: 20px;
+    }
+
 
 }
 
@@ -286,7 +324,7 @@ canvas {
     }
 
     #endScreen {
-        background-size: 84%;
+        background-size: 90%;
     }
 
     .arrowRightLeft {
@@ -308,5 +346,49 @@ canvas {
     #attackBtn {
         background-color: rgb(213, 145, 60);
         border-radius: 50%;
+    }
+
+
+    html, body {
+        height: 100%;
+        margin: 0;
+        overflow:hidden;
+    }
+    
+    body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-image: url('img/desert.png');
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+        font-family: 'rioGrande', Arial, Helvetica, sans-serif;
+    }
+    
+    h1 {
+        font-size: 64px;
+        margin: 0;
+    }
+    
+    #game {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: absolute; 
+        top: 0; 
+        left: 0; 
+        width: 100vw; 
+        height: 100vh; 
+        overflow: hidden; 
+    }
+    
+    canvas {
+        background-color: black;
+        display: block;
+        border-radius: 10px;
+        width: 100%; 
+        height: 100%; 
     }
 }

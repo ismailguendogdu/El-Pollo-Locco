@@ -5,6 +5,7 @@ let startButton;
 let ctx;
 let playAgainButton;
 let endScreen;
+let gameMusic;
 
 function init() {
     canvas = document.getElementById('canvas');
@@ -12,6 +13,7 @@ function init() {
     startButton = document.getElementById('startButton');
     playAgainButton = document.getElementById('playAgainButton');
     endScreen = document.getElementById('endScreen');
+    gameMusic = document.getElementById('gameMusic');
 
     drawStartScreen();
 
@@ -34,6 +36,7 @@ function startGame() {
    
     window.allSounds = [];
 
+    gameMusic.play();
     initLevel();
     startButton.style.display = 'none';
     endScreen.style.display = 'none';
@@ -46,6 +49,9 @@ function startGame() {
 
 
 function playAgain() {
+
+    gameMusic.currentTime = 0;
+    gameMusic.play();
 
     initLevel();
     startButton.style.display = 'none';
@@ -83,6 +89,7 @@ function toggleAllSounds() {
     window.allSounds.forEach(sound => {
         sound.muted = window.isMuted;
     });
+    gameMusic.muted = window.isMuted;
 }
 
 window.addEventListener('keydown', (e) => {
@@ -144,4 +151,72 @@ window.addEventListener('keyup', (e) => {
     if (e.keyCode == 16) { 
         keyboard.SHIFT = false;
     }
+});
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+    
+    const leftBtn = document.getElementById('leftBtn');
+    const rightBtn = document.getElementById('rightBtn');
+    const upBtn = document.getElementById('upBtn');
+    const attackBtn = document.getElementById('attackBtn');
+
+    
+    leftBtn.addEventListener('touchstart', (e) => {
+        e.preventDefault(); 
+        keyboard.LEFT = true; 
+    }, { passive: false });
+
+    rightBtn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        keyboard.RIGHT = true; 
+    }, { passive: false });
+
+    attackBtn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        keyboard.D = true; 
+    }, { passive: false });
+
+    upBtn.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        keyboard.SPACE = true; 
+    }, { passive: false });
+
+    
+    leftBtn.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        keyboard.LEFT = false; 
+    }, { passive: false });
+
+    rightBtn.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        keyboard.RIGHT = false;
+    }, { passive: false });
+
+    attackBtn.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        keyboard.D = false; 
+    }, { passive: false });
+
+    upBtn.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        keyboard.SPACE = false; 
+    }, { passive: false });
+
+    
+    const mobileControls = document.querySelector('.mobileControls');
+    mobileControls.addEventListener('touchmove', (e) => {
+        e.preventDefault(); 
+    }, { passive: false });
+
+    leftBtn.addEventListener('mousedown', () => { keyboard.LEFT = true; });
+    rightBtn.addEventListener('mousedown', () => { keyboard.RIGHT = true; });
+    attackBtn.addEventListener('mousedown', () => { keyboard.D = true; });
+    upBtn.addEventListener('mousedown', () => { keyboard.SPACE = true; });
+
+    leftBtn.addEventListener('mouseup', () => { keyboard.LEFT = false; });
+    rightBtn.addEventListener('mouseup', () => { keyboard.RIGHT = false; });
+    attackBtn.addEventListener('mouseup', () => { keyboard.D = false; });
+    upBtn.addEventListener('mouseup', () => { keyboard.SPACE = false; });
 });

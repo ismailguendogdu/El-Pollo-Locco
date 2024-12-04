@@ -72,7 +72,7 @@ class Character extends MovableObject {
 
     idleTime;
     walking_sound = new Audio('audio/walking.mp3');
-    jumping_sound = new Audio('audio/jump.mp3')
+    jumping_sound = new Audio('audio/jump.mp3');
    
 
     constructor() {

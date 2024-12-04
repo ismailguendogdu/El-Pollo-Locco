@@ -41,22 +41,24 @@ class Endboss extends MovableObject {
   }
 
   animate() {
-    
     setInterval(() => {
         if (!this.isDeadChicken) {
-            if(this.isDamage){
-                this.playAnimation(this.IMAGES_HURT); 
+            if (this.isDamage) {
+                this.playAnimation(this.IMAGES_HURT);
             } else {
                 this.moveLeft();
             }
 
             setTimeout(() => {
                 this.isDamage = false;
-            }, 2000); 
-
-        } 
-        else if (this.isHurt()) {
-            this.playAnimation(this.IMAGES_HURT);
+            }, 2000);
+        } else {
+            if (this.isHurt()) {
+                this.playAnimation(this.IMAGES_HURT);
+            } else {
+                this.playAnimation(this.IMAGES_DEAD);
+                this.removeChicken();
+            }
         }
     }, 1000 / 60);
 
@@ -64,7 +66,7 @@ class Endboss extends MovableObject {
         if (!this.isDeadChicken) {
             this.playAnimation(this.IMAGES_WALKING);
         }
-    }, 2000);
+    }, 1000);
 }
 
 hit() {
@@ -72,6 +74,7 @@ hit() {
     this.energyEndboss -= 20;
     if (this.energyEndboss < 0) {
         this.energyEndboss = 0;
+        this.dieEndboss(); 
     }
     this.adjustSpeed();
     this.lastHit = new Date().getTime();
@@ -90,7 +93,7 @@ dieEndboss() {
     this.playAnimation(this.IMAGES_DEAD); 
     setTimeout(() => {
         this.removeChicken();
-    }, 1000); 
+    }, 2500);
 }
 
 removeChicken() {

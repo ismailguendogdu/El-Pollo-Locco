@@ -49,28 +49,34 @@ class World {
   }
 
   checkCollisions() {
-      this.level.enemies.forEach((enemy, i) => {
-          if (!enemy.isDeadChicken && this.character.isColliding(enemy)) {
-              if (enemy instanceof Endboss) {
-                  this.character.energy = -20;
-                  this.statusBar.setPercentage(this.character.energy);
-                  this.endGame('lose');
-              } else if (this.character.y + this.character.height - 50 < enemy.y 
-                  && this.character.speedY <= 0) {
-                  enemy.dieChicken();
-                  setTimeout(() => {
-                      this.level.enemies.splice(i, 1);
-                  }, 1000);
-              } 
-              else if (this.character.y + this.character.height >= enemy.y) {
-                  if (!this.character.isInvulnerable()) {
-                      this.character.hit();
-                      this.statusBar.setPercentage(this.character.energy);
-                  }
-              }
-          }
-      });
-  }
+    this.level.enemies.forEach((enemy, i) => {
+        if (!enemy.isDeadChicken && this.character.isColliding(enemy)) {
+            if (enemy instanceof Endboss) {
+                
+                if (!this.character.isInvulnerable()) {
+                    this.character.hit(20); 
+                    this.statusBar.setPercentage(this.character.energy);
+                    
+                    if (this.character.energy <= 0) {
+                        this.endGame('lose');
+                    }
+                }
+            } else if (this.character.y + this.character.height - 50 < enemy.y 
+                && this.character.speedY <= 0) {
+                enemy.dieChicken();
+                setTimeout(() => {
+                    this.level.enemies.splice(i, 1);
+                }, 1500);
+            } 
+            else if (this.character.y + this.character.height >= enemy.y) {
+                if (!this.character.isInvulnerable()) {
+                    this.character.hit();
+                    this.statusBar.setPercentage(this.character.energy);
+                }
+            }
+        }
+    });
+}
       
   checkCollisionsEndboss(bottle, boss, bottleIndex) {
       if (bottle.isColliding(boss)) {
@@ -83,7 +89,7 @@ class World {
 
               setTimeout(() => {
                   this.endGame('win');
-              }, 1000);
+              }, 1500);
           }
       }
   }
@@ -141,7 +147,6 @@ class World {
           this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
   
-
   draw() {
 
       if (this.gameEnded) return;
@@ -164,11 +169,9 @@ class World {
       this.addObjectsToMap(this.level.salsaBottles);
       this.addObjectsToMap(this.level.coins);
       this.addObjectsToMap(this.throwableObjects);
-      
 
       this.ctx.translate(-this.camera_x, 0);
 
-      
       let self = this;
       requestAnimationFrame(function() {
           self.draw();
@@ -251,3 +254,21 @@ document.addEventListener('DOMContentLoaded', () => {
       overlay.classList.remove('active');
     }
   });
+
+  function showPrivacyPopup() {
+    const privacyText = document.querySelector('.privacy-text');
+    privacyText.style.display = 'block';
+    privacyText.scrollTop = 0; 
+}
+
+function checkOrientation() {
+    const orientationWarning = document.getElementById('orientationWarning');
+    if (window.innerHeight > window.innerWidth) {
+        orientationWarning.style.display = 'flex'; 
+    } else {
+        orientationWarning.style.display = 'none'; 
+    }
+}
+
+window.addEventListener('load', checkOrientation);
+window.addEventListener('resize', checkOrientation);
