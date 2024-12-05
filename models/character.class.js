@@ -54,16 +54,16 @@ class Character extends MovableObject {
   ];
 
   IMAGES_IDLE = [
-    "img/2_character_pepe/1_idle/long_idle/I-11.png",
-    "img/2_character_pepe/1_idle/long_idle/I-12.png",
-    "img/2_character_pepe/1_idle/long_idle/I-13.png",
-    "img/2_character_pepe/1_idle/long_idle/I-14.png",
-    "img/2_character_pepe/1_idle/long_idle/I-15.png",
-    "img/2_character_pepe/1_idle/long_idle/I-16.png",
-    "img/2_character_pepe/1_idle/long_idle/I-17.png",
-    "img/2_character_pepe/1_idle/long_idle/I-18.png",
-    "img/2_character_pepe/1_idle/long_idle/I-19.png",
-    "img/2_character_pepe/1_idle/long_idle/I-20.png",
+    " img/2_character_pepe/1_idle/idle/I-1.png",
+    " img/2_character_pepe/1_idle/idle/I-2.png",
+    " img/2_character_pepe/1_idle/idle/I-3.png",
+    " img/2_character_pepe/1_idle/idle/I-4.png",
+    " img/2_character_pepe/1_idle/idle/I-5.png",
+    " img/2_character_pepe/1_idle/idle/I-6.png",
+    " img/2_character_pepe/1_idle/idle/I-7.png",
+    " img/2_character_pepe/1_idle/idle/I-8.png",
+    " img/2_character_pepe/1_idle/idle/I-9.png",
+    " img/2_character_pepe/1_idle/idle/I-10.png",
   ];
 
   world;
@@ -107,7 +107,6 @@ class Character extends MovableObject {
   }
 
   /** Checks if the character is currently invulnerable. */
-
   isInvulnerable() {
     return this.isHurt();
   }
@@ -119,7 +118,6 @@ class Character extends MovableObject {
    * 'lose' status. If the character is still alive, it updates the timestamp of the
    * last hit and updates the status bar to reflect the current energy level.
    */
-
   hit() {
     if (!this.isInvulnerable()) {
       this.energy -= 20;
@@ -140,34 +138,49 @@ class Character extends MovableObject {
    * The dash occurs over a specified duration, updating the character's position in small increments.
    * Once the dash completes, the dashing state is reset.
    */
-
   dash() {
     if (!this.isDashing && this.canDash()) {
-      this.isDashing = true;
-      this.lastDashTime = new Date().getTime();
-
-      let dashDirection = this.otherDirection ? -1 : 1;
-      let totalDashDistance = dashDirection * this.dashDistance;
-      let dashStartTime = new Date().getTime();
-      let startX = this.x;
-
-      let dashInterval = setInterval(() => {
-        let currentTime = new Date().getTime();
-        let elapsedTime = currentTime - dashStartTime;
-        let progress = elapsedTime / this.dashDuration;
-
-        if (progress >= 1) {
-          progress = 1;
-        }
-        this.x = startX + totalDashDistance * progress;
-        this.x = Math.max(0, Math.min(this.x, this.world.level.level_end_x));
-
-        if (progress >= 1) {
-          clearInterval(dashInterval);
-          this.isDashing = false;
-        }
-      }, 1000 / 60);
+      this.startDash();
     }
+  }
+
+  startDash() {
+    this.isDashing = true;
+    this.lastDashTime = Date.now();
+
+    const dashDirection = this.otherDirection ? -1 : 1;
+    const totalDashDistance = dashDirection * this.dashDistance;
+    const dashStartTime = Date.now();
+    const startX = this.x;
+
+    this.executeDash(totalDashDistance, dashStartTime, startX);
+  }
+
+  executeDash(totalDashDistance, dashStartTime, startX) {
+    const dashInterval = setInterval(() => {
+      const progress = this.calculateDashProgress(dashStartTime);
+
+      this.x = this.calculateNewPosition(startX, totalDashDistance, progress);
+      this.constrainPosition();
+
+      if (progress >= 1) {
+        clearInterval(dashInterval);
+        this.isDashing = false;
+      }
+    }, 1000 / 60);
+  }
+
+  calculateDashProgress(dashStartTime) {
+    const elapsedTime = Date.now() - dashStartTime;
+    return Math.min(elapsedTime / this.dashDuration, 1);
+  }
+
+  calculateNewPosition(startX, totalDashDistance, progress) {
+    return startX + totalDashDistance * progress;
+  }
+
+  constrainPosition() {
+    this.x = Math.max(0, Math.min(this.x, this.world.level.level_end_x));
   }
 
   /**
@@ -182,65 +195,108 @@ class Character extends MovableObject {
   }
 
   /**
-   * Handles the animation and movement logic for the character.
-   * This method sets up two intervals: one for handling character movement and sound,
-   * and another for updating the character's animation based on its state. It checks
-   * for user input from the keyboard to determine if the character should dash, move
-   * left or right, jump, or play specific animations based on its current status (e.g.,
-   * dead, hurt, jumping, walking, idle).
-   * The movement interval runs at 60 frames per second, while the animation update runs
-   * every 50 milliseconds. The character's position is also updated relative to the camera.
+   * Initiates the animation and movement process for the character.
+   * This function sets up two intervals: one for handling the character's
+   * movement and updating the camera position at a frame rate of 60 frames per
+   * second, and another for updating the character's animation state every 50
+   * milliseconds. The function also plays the idle animation initially.
    */
-
   animate() {
     setInterval(() => {
-      this.walking_sound.pause();
-
-      if (this.world.keyboard.SHIFT && !this.isDashing) {
-        this.dash();
-      } else if (
-        this.world.keyboard.RIGHT &&
-        this.x < this.world.level.level_end_x &&
-        !this.isDashing
-      ) {
-        this.moveRight();
-        this.otherDirection = false;
-        this.walking_sound.play();
-        this.resetIdleTime();
-      } else if (this.world.keyboard.LEFT && this.x > 0 && !this.isDashing) {
-        this.moveLeft();
-        this.otherDirection = true;
-        this.walking_sound.play();
-        this.resetIdleTime();
-      }
-
-      if (
-        this.world.keyboard.SPACE &&
-        !this.isAboveGround() &&
-        !this.isDashing
-      ) {
-        this.jump();
-        this.jumping_sound.play();
-        this.resetIdleTime();
-      }
+      this.handleMovement();
       this.world.camera_x = -this.x + 100;
     }, 1000 / 60);
 
     setInterval(() => {
-      if (this.isDead()) {
-        this.playAnimation(this.IMAGES_DEAD);
-      } else if (this.isHurt()) {
-        this.playAnimation(this.IMAGES_HURT);
-      } else if (this.isAboveGround()) {
-        this.playAnimation(this.IMAGES_JUMPING);
-      } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
-        this.playAnimation(this.IMAGES_WALKING);
-      } else {
-        this.startIdleTime();
-      }
+      this.updateAnimation();
     }, 50);
 
     this.playAnimation(this.IMAGES_IDLE);
+  }
+
+  /**
+   * Handles the character's movement based on keyboard input.
+   * This function checks the state of various keyboard keys to determine
+   * the character's movement. It pauses the walking sound, and if the
+   * SHIFT key is pressed, it activates the dash method. If the RIGHT
+   * or LEFT keys are pressed, it calls the respective methods to move
+   * the character in that direction, provided movement is possible.
+   * Additionally, if the SPACE key is pressed and the character is not
+   * above ground and is not dashing, it triggers a jump action.
+   */
+  handleMovement() {
+    this.walking_sound.pause();
+
+    if (this.world.keyboard.SHIFT && !this.isDashing) {
+      this.dash();
+    } else if (this.world.keyboard.RIGHT) {
+      this.moveRightIfPossible();
+    } else if (this.world.keyboard.LEFT) {
+      this.moveLeftIfPossible();
+    }
+    if (this.world.keyboard.SPACE && !this.isAboveGround() && !this.isDashing) {
+      this.jump();
+      this.jumping_sound.play();
+      this.resetIdleTime();
+    }
+  }
+
+  /**
+   * Moves the character to the right if movement conditions are met.
+   * This function checks if the character's current position is less than
+   * the level's end position and ensures that the character is not currently
+   * dashing. If both conditions are satisfied, it moves the character to
+   * the right, updates the direction, plays the walking sound, and resets
+   * the idle time.
+   */
+  moveRightIfPossible() {
+    if (this.x < this.world.level.level_end_x && !this.isDashing) {
+      this.moveRight();
+      this.otherDirection = false;
+      this.walking_sound.play();
+      this.resetIdleTime();
+    }
+  }
+
+  /**
+   * Moves the character to the left if movement conditions are met.
+   * This function checks if the character's current position is less than
+   * the level's end position and ensures that the character is not currently
+   * dashing. If both conditions are satisfied, it moves the character to
+   * the left, updates the direction, plays the walking sound, and resets
+   * the idle time.
+   */
+  moveLeftIfPossible() {
+    if (this.x > 0 && !this.isDashing) {
+      this.moveLeft();
+      this.otherDirection = true;
+      this.walking_sound.play();
+      this.resetIdleTime();
+    }
+  }
+
+  /**
+   * Updates the character's animation based on its current state.
+   * This function checks the character's status to determine which
+   * animation to play. It prioritizes the following states:
+   * - If the character is dead, it plays the dead animation.
+   * - If the character is hurt, it plays the hurt animation.
+   * - If the character is above ground, it plays the jumping animation.
+   * - If the character is moving left or right, it plays the walking animation.
+   * - If none of these conditions are met, it starts the idle timer.
+   */
+  updateAnimation() {
+    if (this.isDead()) {
+      this.playAnimation(this.IMAGES_DEAD);
+    } else if (this.isHurt()) {
+      this.playAnimation(this.IMAGES_HURT);
+    } else if (this.isAboveGround()) {
+      this.playAnimation(this.IMAGES_JUMPING);
+    } else if (this.world.keyboard.RIGHT || this.world.keyboard.LEFT) {
+      this.playAnimation(this.IMAGES_WALKING);
+    } else {
+      this.startIdleTime();
+    }
   }
 
   /**
@@ -248,7 +304,6 @@ class Character extends MovableObject {
    * This method sets a timeout for 3000 milliseconds (3 seconds) to trigger
    * the idle animation.
    */
-
   startIdleTime() {
     this.idleTime = setTimeout(() => {
       this.playAnimation(this.IMAGES_IDLE);
@@ -259,7 +314,6 @@ class Character extends MovableObject {
    * Resets the idle timer, preventing the idle animation from playing.
    * This method clears the current idle timeout and restarts the idle timer.
    */
-
   resetIdleTime() {
     clearTimeout(this.idleTime);
     this.startIdleTime();
@@ -270,7 +324,6 @@ class Character extends MovableObject {
    * This method sets the vertical speed (`speedY`) of the character to a
    * predefined value, allowing the character to jump.
    */
-
   jump() {
     this.speedY = 30;
   }

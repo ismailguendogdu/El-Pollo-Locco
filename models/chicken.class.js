@@ -19,17 +19,13 @@ class Chicken extends MovableObject {
    * Additionally, it initializes flags to determine if the character is dead
    * or removable. Finally, it starts the animation loop.
    */
-
   constructor() {
     super().loadImage(this.IMAGES_WALKING[0]);
     this.loadImages(this.IMAGES_WALKING);
-
     this.x = 200 + Math.random() * 800;
     this.speed = 0.15 + Math.random() * 0.5;
-
     this.isDeadChicken = false;
     this.isRemovable = false;
-
     this.animate();
   }
 

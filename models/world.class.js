@@ -28,7 +28,6 @@ class World {
    * `world` property of the character. This allows the character to
    * reference its associated world for game logic and interactions.
    */
-
   setWorld() {
     this.character.world = this;
   }
@@ -40,15 +39,19 @@ class World {
    * as well as handling thrown objects and their collisions. The checks are
    * performed every 100 milliseconds to ensure timely updates during gameplay.
    */
-
   run() {
+    setInterval(() => {
+
+      this.checkThrowObjects();
+      this.checkThrowBottleCollisions();
+    }, 100);
+
     setInterval(() => {
       this.checkCollisions();
       this.checkCollisionsBottles();
       this.checkCollisionsCoins();
-      this.checkThrowObjects();
-      this.checkThrowBottleCollisions();
-    }, 100);
+
+    }, 50);
   }
 
   /**
@@ -60,7 +63,6 @@ class World {
    * and adds it to the `throwableObjects` array. It also decrements the
    * bottle count and updates the character's bottle bar percentage.
    */
-
   checkThrowObjects() {
     if (this.keyboard.D && this.collectBottles > 0) {
       let bottleX = this.character.otherDirection
@@ -90,35 +92,54 @@ class World {
    * - If the character collides with the enemy from above, it takes damage
    *   unless it is invulnerable.
    */
-
   checkCollisions() {
     this.level.enemies.forEach((enemy, i) => {
       if (!enemy.isDeadChicken && this.character.isColliding(enemy)) {
-        if (enemy instanceof Endboss) {
-          if (!this.character.isInvulnerable()) {
-            this.character.hit(20);
-            this.statusBar.setPercentage(this.character.energy);
-
-            if (this.character.energy <= 0) {
-              this.endGame("lose");
-            }
-          }
-        } else if (
-          this.character.y + this.character.height - 50 < enemy.y &&
-          this.character.speedY <= 0
-        ) {
-          enemy.dieChicken();
-          setTimeout(() => {
-            this.level.enemies.splice(i, 1);
-          }, 1500);
-        } else if (this.character.y + this.character.height >= enemy.y) {
-          if (!this.character.isInvulnerable()) {
-            this.character.hit();
-            this.statusBar.setPercentage(this.character.energy);
-          }
-        }
+        this.handleCollisionWithEnemy(enemy, i);
       }
     });
+  }
+  
+  handleCollisionWithEnemy(enemy, index) {
+    if (enemy instanceof Endboss) {
+      this.handleEndbossCollision();
+    } else if (this.isCharacterJumpingOnEnemy(enemy)) {
+      this.handleEnemyDefeat(enemy, index);
+    } else {
+      this.handleCharacterHitByEnemy(enemy);
+    }
+  }
+  
+  handleEndbossCollision() {
+    if (!this.character.isInvulnerable()) {
+      this.character.hit(20);
+      this.statusBar.setPercentage(this.character.energy);
+  
+      if (this.character.energy <= 0) {
+        this.endGame("lose");
+      }
+    }
+  }
+  
+  isCharacterJumpingOnEnemy(enemy) {
+    return (
+      this.character.y + this.character.height - 50 < enemy.y &&
+      this.character.speedY <= 0
+    );
+  }
+  
+  handleEnemyDefeat(enemy, index) {
+    enemy.dieChicken();
+    setTimeout(() => {
+      this.level.enemies.splice(index, 1);
+    }, 1500);
+  }
+  
+  handleCharacterHitByEnemy(enemy) {
+    if (!this.character.isInvulnerable()) {
+      this.character.hit();
+      this.statusBar.setPercentage(this.character.energy);
+    }
   }
 
   /**
@@ -129,7 +150,6 @@ class World {
    * If the Endboss's energy drops to 0 or below, it is marked as dead, and
    * the game ends with a win after a delay.
    */
-
   checkCollisionsEndboss(bottle, boss, bottleIndex) {
     if (bottle.isColliding(boss)) {
       boss.hit();
@@ -155,7 +175,6 @@ class World {
    * - For other enemies, both the enemy and the bottle are removed from their
    *   respective lists.
    */
-
   checkThrowBottleCollisions() {
     this.throwableObjects.forEach((bottle, b) => {
       this.level.enemies.forEach((enemy, e) => {
@@ -199,7 +218,6 @@ class World {
    * character collects the coin, updates the coins bar, and removes the
    * collected coin from the level.
    */
-
   checkCollisionsCoins() {
     this.level.coins.forEach((coin, i) => {
       if (this.character.isColliding(coin)) {
@@ -217,10 +235,8 @@ class World {
    * background image based on whether the player won or lost. It also
    * clears the game canvas.
    */
-
   endGame(result) {
     if (this.gameEnded) return;
-
     this.gameEnded = true;
     const endScreen = document.getElementById("endScreen");
     endScreen.style.display = "block";
@@ -244,7 +260,6 @@ class World {
    * `requestAnimationFrame` to create a smooth animation loop for continuous
    * rendering.
    */
-
   draw() {
     if (this.gameEnded) return;
 
@@ -281,7 +296,6 @@ class World {
    * `addToMap` method for each object, allowing them to be rendered
    * on the canvas.
    */
-
   addObjectsToMap(objects) {
     objects.forEach((o) => {
       this.addToMap(o);
@@ -294,7 +308,6 @@ class World {
    * the image if necessary before drawing the object on the canvas. After
    * drawing, it checks again to flip the image back to its original orientation.
    */
-
   addToMap(mo) {
     if (mo.otherDirection) {
       this.flipImage(mo);
@@ -313,7 +326,6 @@ class World {
    * to the object's width, and scales the context to flip the image.
    * It also adjusts the object's x-coordinate to reflect the flip.
    */
-
   flipImage(mo) {
     this.ctx.save();
     this.ctx.translate(mo.width, 0);
@@ -327,45 +339,72 @@ class World {
    * position after being flipped, and restores the previous canvas state to
    * undo the flipping transformation.
    */
-
   flipImageBack(mo) {
     mo.x = mo.x * -1;
     this.ctx.restore();
   }
 }
 
-/**
- * Initializes the privacy policy popup functionality when the DOM is fully loaded.
- * This script listens for the click event on the privacy button to toggle the
- * visibility of the privacy text and the overlay. It also handles closing the
- * popup when the overlay or a close button is clicked.
- */
+document.addEventListener("DOMContentLoaded", initPrivacy);
 
-document.addEventListener("DOMContentLoaded", () => {
+/**
+ * Initializes the privacy policy functionality when the DOM is fully loaded.
+ * This function sets up event listeners for the privacy button to toggle the 
+ * visibility of the privacy text and overlay. It also handles closing the 
+ * popup when the overlay or a close button is clicked. The overlay is created 
+ * using the `createOverlay` function.
+ */
+function initPrivacy() {
   const privacyBtn = document.querySelector(".privacy-btn");
   const privacyText = document.querySelector(".privacy-text");
-  const overlay = document.createElement("div");
+  const overlay = createOverlay();
 
-  overlay.classList.add("overlay");
-  document.body.appendChild(overlay);
-
-  privacyBtn.addEventListener("click", () => {
-    privacyText.classList.toggle("active");
-    overlay.classList.toggle("active");
-  });
-
-  overlay.addEventListener("click", closePopup);
+  privacyBtn.addEventListener("click", () => togglePopup(privacyText, overlay));
+  overlay.addEventListener("click", () => closePopup(privacyText, overlay));
   document.addEventListener("click", (event) => {
     if (event.target.classList.contains("close-btn")) {
-      closePopup();
+      closePopup(privacyText, overlay);
     }
   });
+}
 
-  function closePopup() {
-    privacyText.classList.remove("active");
-    overlay.classList.remove("active");
-  }
-});
+/**
+ * Creates an overlay element for the webpage.
+ * This function generates a new `div` element that serves as an overlay, 
+ * typically used to dim the background when a popup is displayed. The 
+ * overlay is appended to the document body and is assigned a class of 
+ * "overlay" for styling purposes.
+ */
+function createOverlay() {
+  const overlay = document.createElement("div");
+  overlay.classList.add("overlay");
+  document.body.appendChild(overlay);
+  return overlay;
+}
+
+/**
+ * Toggles the visibility of the privacy policy popup and overlay.
+ * This function adds or removes the "active" class from the provided 
+ * `privacyText` and `overlay` elements, which controls their visibility 
+ * on the webpage. When the "active" class is added, the elements become 
+ * visible; when it is removed, they become hidden.
+ */
+function togglePopup(privacyText, overlay) {
+  privacyText.classList.toggle("active");
+  overlay.classList.toggle("active");
+}
+
+/**
+ * Closes the privacy policy popup and hides the overlay.
+ * This function removes the "active" class from the provided 
+ * `privacyText` and `overlay` elements, which hides them from 
+ * the webpage. It is typically used to close the popup when 
+ * the overlay or a close button is clicked.
+ */
+function closePopup(privacyText, overlay) {
+  privacyText.classList.remove("active");
+  overlay.classList.remove("active");
+}
 
 /**
  * Initializes the popup functionality when the DOM is fully loaded.
@@ -374,7 +413,6 @@ document.addEventListener("DOMContentLoaded", () => {
  * is clicked, the popup and overlay become visible. The popup can be closed by
  * clicking either the close button or the overlay itself.
  */
-
 document.addEventListener("DOMContentLoaded", () => {
   const controlButton = document.getElementById("controlButton");
   const popup = document.querySelector(".popup");
@@ -401,7 +439,6 @@ document.addEventListener("DOMContentLoaded", () => {
  * to 'block'. It also ensures that the scroll position of the privacy text
  * is reset to the top, providing a clear view of the content when it is displayed.
  */
-
 function showPrivacyPopup() {
   const privacyText = document.querySelector(".privacy-text");
   privacyText.style.display = "block";
@@ -416,7 +453,6 @@ function showPrivacyPopup() {
  * making it visible. If the window is wider than it is tall (landscape mode),
  * it hides the warning by setting its display style to 'none'.
  */
-
 function checkOrientation() {
   const orientationWarning = document.getElementById("orientationWarning");
   if (window.innerHeight > window.innerWidth) {

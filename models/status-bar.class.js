@@ -44,7 +44,6 @@ class StatusBar extends DrawableObject {
    * - 20% to 39% corresponds to index 1
    * - 0% to 19% corresponds to index 0
    */
-
   resolveImageIndex() {
     if (this.percetage == 200) {
       return 5;

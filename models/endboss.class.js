@@ -5,14 +5,10 @@ class Endboss extends MovableObject {
   energyEndboss = 100;
 
   IMAGES_WALKING = [
-    "img/4_enemie_boss_chicken/2_alert/G5.png",
-    "img/4_enemie_boss_chicken/2_alert/G6.png",
-    "img/4_enemie_boss_chicken/2_alert/G7.png",
-    "img/4_enemie_boss_chicken/2_alert/G8.png",
-    "img/4_enemie_boss_chicken/2_alert/G9.png",
-    "img/4_enemie_boss_chicken/2_alert/G10.png",
-    "img/4_enemie_boss_chicken/2_alert/G11.png",
-    "img/4_enemie_boss_chicken/2_alert/G12.png",
+    "img/4_enemie_boss_chicken/1_walk/G1.png",
+    "img/4_enemie_boss_chicken/1_walk/G2.png",
+    "img/4_enemie_boss_chicken/1_walk/G3.png",
+    "img/4_enemie_boss_chicken/1_walk/G4.png",
   ];
 
   IMAGES_HURT = [
@@ -39,48 +35,91 @@ class Endboss extends MovableObject {
     this.speed = 0.15 + Math.random() * 1.5;
     this.animate();
   }
+
   /**
- * Handles the animation and movement logic for the chicken character.
- * This method sets up two intervals: 
- *   The first interval checks if the chicken is alive. If it is not dead, 
- *   it evaluates whether the chicken is damaged. If damaged, it plays the 
- *   hurt animation; otherwise, it moves the chicken to the left. A timeout 
- *   resets the damage state after 2000 milliseconds (2 seconds).
- *   The second interval plays the walking animation every second if the 
- *   chicken is not dead.
- * 
- * If the chicken is dead, it plays the dead animation and calls 
- * `removeChicken` to mark it for removal from the game.
-
- */
-
+   * Initiates the animation process for the character.
+   * This function sets up two intervals: one for updating the character's
+   * movement at a frame rate of 60 frames per second, and another for
+   * updating the character's animation state at a rate of every 250 milliseconds.
+   */
   animate() {
     setInterval(() => {
-      if (!this.isDeadChicken) {
-        if (this.isDamage) {
-          this.playAnimation(this.IMAGES_HURT);
-        } else {
-          this.moveLeft();
-        }
-
-        setTimeout(() => {
-          this.isDamage = false;
-        }, 2000);
-      } else {
-        if (this.isHurt()) {
-          this.playAnimation(this.IMAGES_HURT);
-        } else {
-          this.playAnimation(this.IMAGES_DEAD);
-          this.removeChicken();
-        }
-      }
+      this.updateMovement();
     }, 1000 / 60);
 
     setInterval(() => {
-      if (!this.isDeadChicken) {
-        this.playAnimation(this.IMAGES_WALKING);
-      }
-    }, 1000);
+      this.updateAnimation();
+    }, 250);
+  }
+
+  /**
+   * Updates the movement state of the character based on its health status.
+   * This function checks if the character (chicken) is dead. If the character
+   * is not dead, it calls the `handleDamage` method to process any damage
+   * taken. If the character is dead, it calls the `handleDeadChicken` method
+   * to manage its behavior when deceased.
+   */
+  updateMovement() {
+    if (!this.isDeadChicken) {
+      this.handleDamage();
+    } else {
+      this.handleDeadChicken();
+    }
+  }
+
+  /**
+   * Handles the character's response to taking damage.
+   * This function checks if the character is in a damaged state. If the character
+   * is damaged, it plays the hurt animation and resets the damage status. If the
+   * character is not damaged, it continues to move left.
+   */
+  handleDamage() {
+    if (this.isDamage) {
+      this.playAnimation(this.IMAGES_HURT);
+      this.resetDamageStatus();
+    } else {
+      this.moveLeft();
+    }
+  }
+
+  /**
+   * Resets the damage status of the character after a delay.
+   * This function sets a timeout to change the `isDamage` property to
+   * `false` after a period of 2000 milliseconds (2 seconds). This allows
+   * the character to recover from the damaged state after a brief duration.
+   */
+  resetDamageStatus() {
+    setTimeout(() => {
+      this.isDamage = false;
+    }, 2000);
+  }
+
+  /**
+   * Handles the behavior of the character when it is dead.
+   * This function checks if the character is in a hurt state. If the character
+   * is hurt, it plays the hurt animation. If the character is not hurt, it
+   * plays the dead animation and removes the chicken from the game.
+   */
+  handleDeadChicken() {
+    if (this.isHurt()) {
+      this.playAnimation(this.IMAGES_HURT);
+    } else {
+      this.playAnimation(this.IMAGES_DEAD);
+      this.removeChicken();
+    }
+  }
+
+  /**
+   * Updates the character's animation state based on its health status.
+   * This function checks if the character (chicken) is alive. If the character
+   * is not dead, it plays the walking animation. This function is typically
+   * called in the animation loop to ensure the character's animation reflects
+   * its current state.
+   */
+  updateAnimation() {
+    if (!this.isDeadChicken) {
+      this.playAnimation(this.IMAGES_WALKING);
+    }
   }
 
   /**
@@ -91,7 +130,6 @@ class Endboss extends MovableObject {
    * Additionally, it adjusts the speed of the endboss and records the timestamp
    * of the last hit.
    */
-
   hit() {
     this.isDamage = true;
     this.energyEndboss -= 20;
@@ -110,11 +148,9 @@ class Endboss extends MovableObject {
    * The speed is adjusted to be between a minimum speed and a maximum speed,
    * allowing the endboss to slow down as its energy decreases.
    */
-
   adjustSpeed() {
     let maxSpeed = 4;
     let minSpeed = 0.5;
-
     let energyPercentage = this.energyEndboss / 100;
     this.speed = minSpeed + (1 - energyPercentage) * (maxSpeed - minSpeed);
   }
@@ -127,7 +163,6 @@ class Endboss extends MovableObject {
    * it calls the `removeChicken` method to mark the endboss for removal
    * from the game.
    */
-
   dieEndboss() {
     this.isDeadChicken = true;
     this.playAnimation(this.IMAGES_DEAD);

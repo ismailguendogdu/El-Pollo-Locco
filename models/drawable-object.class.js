@@ -8,7 +8,6 @@ class DrawableObject {
   width = 100;
 
   /** Loads an image from the specified path. */
-
   loadImage(path) {
     this.img = new Image();
     this.img.src = path;
@@ -20,10 +19,10 @@ class DrawableObject {
    * the image at the specified position (`x`, `y`) with the defined width
    * and height. This allows the object to be rendered visually in the game.
    */
-
   draw(ctx) {
     ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
   }
+
   /**
    * Draws a blue frame around the object if it is a specific type.
    * This method checks if the current instance is one of the following classes:
@@ -32,7 +31,6 @@ class DrawableObject {
    * dimensions (`x`, `y`, `width`, `height`) on the provided canvas rendering
    * context (`ctx`). This can be useful for debugging purposes.
    */
-
   drawFrame(ctx) {
     if (
       this instanceof Character ||
@@ -56,7 +54,6 @@ class DrawableObject {
    * is stored in the `imageCache` for later use, allowing for efficient
    * rendering without reloading the images.
    */
-
   loadImages(arr) {
     arr.forEach((path) => {
       let img = new Image();

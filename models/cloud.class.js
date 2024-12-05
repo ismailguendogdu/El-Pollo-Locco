@@ -18,7 +18,6 @@ class Cloud extends MovableObject {
   }
 
   /**  Handles the animation logic for the cloud. */
-
   animate() {
     this.moveLeft();
   }
@@ -30,7 +29,6 @@ class Cloud extends MovableObject {
    * This creates a leftward movement effect. The movement is updated
    * at a rate of 60 frames per second.
    */
-
   moveLeft() {
     setInterval(() => {
       this.x -= this.speed;

@@ -22,7 +22,6 @@ class ThrowableObject extends MovableObject {
    * depending on the direction. It then updates the horizontal position (`x`)
    * of the character at a regular interval.
    */
-
   throw(otherDirection) {
     this.speedY = 20;
     this.applyGravity();

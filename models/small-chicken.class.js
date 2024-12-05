@@ -26,13 +26,11 @@ class SmallChicken extends MovableObject {
 
   /**
    * Handles the animation and movement logic for the character.
-   *
    * This method sets up two intervals:
    * - The first interval moves the character to the left at a rate of 60 frames
    *   per second if the character is not dead.
    * - The second interval plays the walking animation every 200 milliseconds
    *   if the character is not dead.
-   *
    * Both intervals rely on the `isDeadChicken` flag to determine if the
    * character should continue moving or animating.
    */

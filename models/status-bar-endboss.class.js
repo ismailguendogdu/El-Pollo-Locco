@@ -26,7 +26,6 @@ class StatusBarEndboss extends DrawableObject {
    * updates the character's image based on the current percentage by resolving
    * the appropriate image index.
    */
-
   setPercentage(percetage) {
     this.percetage = percetage;
     let path = this.IMAGES[this.resolveImageIndex()];

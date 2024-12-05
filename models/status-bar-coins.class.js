@@ -22,7 +22,6 @@ class StatusBarCoins extends DrawableObject {
 
   /**
    * Sets the percentage value and updates the character's image accordingly.
-   *
    * This method assigns a new value to the `percentage` property and ensures
    * it remains within the range of 0 to 100. If the percentage exceeds 100,
    * it is capped at 100; if it falls below 0, it is set to 0. The method also
@@ -52,7 +51,6 @@ class StatusBarCoins extends DrawableObject {
    * - 20% to 39% corresponds to index 1
    * - 0% to 19% corresponds to index 0
    */
-
   resolveImageIndex() {
     if (this.percetage == 100) {
       return 5;

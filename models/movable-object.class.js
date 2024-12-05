@@ -24,7 +24,6 @@ class MovableObject extends DrawableObject {
    * The vertical speed is then reduced by the acceleration value (`acceleration`).
    * The updates occur at a rate of 25 frames per second.
    */
-
   applyGravity() {
     setInterval(() => {
       if (this.isAboveGround() || this.speedY > 0) {
@@ -41,7 +40,6 @@ class MovableObject extends DrawableObject {
    * Otherwise, it checks if the vertical position (`y`) is less than
    * 180 pixels, indicating that the character is above the ground.
    */
-
   isAboveGround() {
     if (this instanceof ThrowableObject) {
       return true;
@@ -87,7 +85,6 @@ class MovableObject extends DrawableObject {
    * If the resulting value exceeds 100, it caps the `coinsBar` at 100 to
    * ensure it does not exceed the maximum limit.
    */
-
   collectCoins() {
     this.coinsBar += 11.11;
     if (this.coinsBar > 100) {
@@ -148,7 +145,6 @@ class MovableObject extends DrawableObject {
    * the current speed to the `x` coordinate, effectively moving the character
    * to the right.
    */
-
   moveRight() {
     this.x += this.speed;
   }
