@@ -39,64 +39,110 @@ class Endboss extends MovableObject {
     this.speed = 0.15 + Math.random() * 1.5;
     this.animate();
   }
+  /**
+ * Handles the animation and movement logic for the chicken character.
+ * This method sets up two intervals: 
+ *   The first interval checks if the chicken is alive. If it is not dead, 
+ *   it evaluates whether the chicken is damaged. If damaged, it plays the 
+ *   hurt animation; otherwise, it moves the chicken to the left. A timeout 
+ *   resets the damage state after 2000 milliseconds (2 seconds).
+ *   The second interval plays the walking animation every second if the 
+ *   chicken is not dead.
+ * 
+ * If the chicken is dead, it plays the dead animation and calls 
+ * `removeChicken` to mark it for removal from the game.
+
+ */
 
   animate() {
     setInterval(() => {
-        if (!this.isDeadChicken) {
-            if (this.isDamage) {
-                this.playAnimation(this.IMAGES_HURT);
-            } else {
-                this.moveLeft();
-            }
-
-            setTimeout(() => {
-                this.isDamage = false;
-            }, 2000);
+      if (!this.isDeadChicken) {
+        if (this.isDamage) {
+          this.playAnimation(this.IMAGES_HURT);
         } else {
-            if (this.isHurt()) {
-                this.playAnimation(this.IMAGES_HURT);
-            } else {
-                this.playAnimation(this.IMAGES_DEAD);
-                this.removeChicken();
-            }
+          this.moveLeft();
         }
+
+        setTimeout(() => {
+          this.isDamage = false;
+        }, 2000);
+      } else {
+        if (this.isHurt()) {
+          this.playAnimation(this.IMAGES_HURT);
+        } else {
+          this.playAnimation(this.IMAGES_DEAD);
+          this.removeChicken();
+        }
+      }
     }, 1000 / 60);
 
     setInterval(() => {
-        if (!this.isDeadChicken) {
-            this.playAnimation(this.IMAGES_WALKING);
-        }
+      if (!this.isDeadChicken) {
+        this.playAnimation(this.IMAGES_WALKING);
+      }
     }, 1000);
-}
+  }
 
-hit() {
+  /**
+   * Applies damage to the endboss character.
+   * This method sets the damage state to true, reduces the endboss's energy
+   * by 20, and checks if the energy has dropped below zero. If so, it sets
+   * the energy to zero and calls the `dieEndboss` method to handle the endboss's death.
+   * Additionally, it adjusts the speed of the endboss and records the timestamp
+   * of the last hit.
+   */
+
+  hit() {
     this.isDamage = true;
     this.energyEndboss -= 20;
     if (this.energyEndboss < 0) {
-        this.energyEndboss = 0;
-        this.dieEndboss(); 
+      this.energyEndboss = 0;
+      this.dieEndboss();
     }
     this.adjustSpeed();
     this.lastHit = new Date().getTime();
-}
+  }
 
-adjustSpeed() {
+  /**
+   * Adjusts the speed of the endboss based on its remaining energy.
+   * This method calculates the current speed of the endboss by determining
+   * the energy percentage relative to a maximum energy of 100.
+   * The speed is adjusted to be between a minimum speed and a maximum speed,
+   * allowing the endboss to slow down as its energy decreases.
+   */
+
+  adjustSpeed() {
     let maxSpeed = 4;
-    let minSpeed = 0.5; 
+    let minSpeed = 0.5;
 
-    let energyPercentage = this.energyEndboss / 100; 
+    let energyPercentage = this.energyEndboss / 100;
     this.speed = minSpeed + (1 - energyPercentage) * (maxSpeed - minSpeed);
-}
+  }
 
-dieEndboss() {
+  /**
+   * Handles the death of the endboss character.
+   * This method sets the `isDeadChicken` flag to true, indicating that the
+   * endboss is no longer active. It plays the dead animation using the
+   * `IMAGES_DEAD` array. After a delay of 2500 milliseconds (2.5 seconds),
+   * it calls the `removeChicken` method to mark the endboss for removal
+   * from the game.
+   */
+
+  dieEndboss() {
     this.isDeadChicken = true;
-    this.playAnimation(this.IMAGES_DEAD); 
+    this.playAnimation(this.IMAGES_DEAD);
     setTimeout(() => {
-        this.removeChicken();
+      this.removeChicken();
     }, 2500);
-}
+  }
 
-removeChicken() {
+  /**
+   * Marks the endboss as removable from the game.
+   * This method sets the `isRemovable` flag to true, indicating that the
+   * endboss can be safely removed from the game environment during the next
+   * update cycle.
+   */
+  removeChicken() {
     this.isRemovable = true;
-}
+  }
 }
